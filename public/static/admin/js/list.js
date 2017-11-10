@@ -66,16 +66,16 @@ function picture_shenqing(obj,id){
 }
 
 /*图片-编辑*/
-function picture_edit(title,url,id){
+function picture_edit(title,id){
     var index = layer.open({
         type: 2,
         title: title,
-        content: url
+        content: update_url+"?id="+id
     });
     layer.full(index);
 }
 
-/*图片-删除*/
+/* 删除*/
 function picture_del(obj,id){
     layer.confirm('确认要删除吗？',function(index){
         $.ajax({

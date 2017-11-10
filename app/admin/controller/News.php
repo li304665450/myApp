@@ -75,6 +75,8 @@ class News extends Base{
             return $e->getMessage();
         }
 
+        $result['curr'] = $limit['page'];
+
 //        dump($result['list']);
 //        foreach ($result['list'] as $value){
 //            echo $value;
