@@ -21,31 +21,7 @@ class News extends Base{
      * @return int
      */
     public function index(){
-
-        $data = input('param.');
-
-        $limit['page'] = !empty($data['page']) ? $data['page'] : 1;//页数
-        $limit['size'] = !empty($data['size']) ? $data['size'] : config('paginate.list_rows');//每页条数
-
-        //检索条件
-        $where['status'] = ['neq', -1];
-
-        //排序要求
-        $order = ['id' => 'desc'];
-
-        //查询数据表
-        try{
-            $result = model('News')->getAll($limit,$where,$order);
-        }catch (\Exception $e){
-            return $e->getMessage();
-        }
-
-        return $this->fetch('',[
-            'list' => $result['list'],
-            'pageTotal' => $result['pageTotal'],
-            'count' => $result['count'],
-            'curr' => $limit['page']
-        ]);
+        return $this->fetch();
     }
 
     /**
@@ -62,7 +38,7 @@ class News extends Base{
         //检索条件
         $where['status'] = ['neq', -1];
         if (!empty($data['title'])){
-            $where['title'] = $data['title'];
+            $where['title'] = ['like','%'.$data['title'].'%'];
         }
 
         //排序要求
@@ -75,12 +51,10 @@ class News extends Base{
             return $e->getMessage();
         }
 
+        //当前页数
         $result['curr'] = $limit['page'];
 
-//        dump($result['list']);
-//        foreach ($result['list'] as $value){
-//            echo $value;
-//        }
+        //数据转为json格式返给前端
         return json_encode($result);
     }
 
@@ -88,7 +62,7 @@ class News extends Base{
      * 添加页面
      * @return mixed
      */
-    public function add(){
+    public function edit(){
         return $this->fetch();
     }
 
@@ -128,4 +102,5 @@ class News extends Base{
             return '数据异常';
         }
     }
+
 }

@@ -66,23 +66,27 @@ function picture_shenqing(obj,id){
 }
 
 /*图片-编辑*/
-function picture_edit(title,id){
+function edit(title,id){
+
+    var url = id ? edit_url+"?id="+id : edit_url;
+
     var index = layer.open({
         type: 2,
         title: title,
-        content: update_url+"?id="+id
+        content: url
     });
     layer.full(index);
 }
 
 /* 删除*/
-function picture_del(obj,id){
+function del(obj,id){
     layer.confirm('确认要删除吗？',function(index){
         $.ajax({
             type: 'POST',
-            url: '',
+            url: delete_url+'?id='+id,
             dataType: 'json',
             success: function(data){
+                console.log(data);
                 $(obj).parents("tr").remove();
                 layer.msg('已删除!',{icon:1,time:1000});
             },

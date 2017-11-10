@@ -10,7 +10,7 @@
 		<input type="text" name="title" id="title" placeholder="标题" style="width:250px" class="input-text">
 		<button id="searchBtn" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜图片</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="picture_add('添加图片','{:url(\'add\')}')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加图片</a></span> <span class="r">共有数据：<strong id="count"></strong> 条</span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="edit('添加图片')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加图片</a></span> <span class="r">共有数据：<strong id="count"></strong> 条</span> </div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort">
 			<thead>
@@ -79,8 +79,8 @@ function loading(page, size) {
             content += "					<td>"+value.id+"</td>";
             content += "					<td>"+value.title+"</td>";
             content += "					<td>"+value.small_title+"</td>";
-            content += "					<td><a href=\'javascript:;\' onClick=\'edit(\'图库编辑\',"+value.id+")\'><img width=\'210\' class=\'picture-thumb\' src=\'"+value.image+"\'></a></td>";
-            content += "					<td class=\'text-l\'><a class=\'maincolor\' href=\'javascript:;\' onClick=\'edit(\'图库编辑\',"+value.id+")\'>"+value.content+"</a></td>";
+            content += "					<td><a href=\'javascript:;\' onClick=\"edit(\'图库编辑\',"+value.id+")\"><img width=\'210\' class=\'picture-thumb\' src=\'"+value.image+"\'></a></td>";
+            content += "					<td class=\'text-l\'><a class=\'maincolor\' href=\'javascript:;\' onClick=\"edit(\'图库编辑\',"+value.id+")\">"+value.content+"</a></td>";
             content += "					<td>"+value.update_time+"</td>";
             content += "					<td class=\'td-status\'><span class=\'label label-success radius\'>已发布</span></td>";
             if(value.is_position == 'on'){
