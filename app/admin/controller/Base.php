@@ -24,21 +24,26 @@ class Base extends Controller{
         }
     }
 
+    /**
+     * 删除记录方法
+     * @param int $id 删除的记录id
+     * @return json 接口返回值，包括操作码和类型提示
+     */
     public function deleteAjax($id = 0){
 
         if (empty($id)){
-            return $this->result('',500,'ID不合法');
+            return $this->result(input('param.'),300,'ID不合法');
         }
 
         //获取调用方法当前控制器名
         $model = $this->model ? $this->model : request()->controller();
 
         try{
-            $reult = model('')->save(['status' => -1], ['id' => $id]);
+            $reult = model($model)->save(['status' => -1], ['id' => $id]);
         }catch (\Exception $e){
-            return $this->result('',2004,'数据库异常');
+            return $this->result($e,400,'数据库异常');
         }
 
-        return $this->result('',0000,$id.'已删除!');
+        return $this->result($reult,200,$id.'已删除!');
     }
 }

@@ -4,13 +4,13 @@
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 图片管理 <span class="c-gray en">&gt;</span> 图片列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
 	<div class="text-c"> 日期范围：
-		<input type="text" name="start_time" id="countTimestart" onfocus="selecttime(1)" value="" size="17" class="input-text Wdate" style="width:120px;" readonly>
+		<input type="text" name="start_time" id="countTimestart" onfocus="selecttime(1)" value="" size="17" class="input-text Wdate" style="width:150px;" readonly>
 		-
-		<input type="text" name="end_time" id="countTimeend" onfocus="selecttime(2)" value="" size="17"  class="input-text Wdate" style="width:120px;" readonly>
+		<input type="text" name="end_time" id="countTimeend" onfocus="selecttime(2)" value="" size="17"  class="input-text Wdate" style="width:150px;" readonly>
 		<input type="text" name="title" id="title" placeholder="标题" style="width:250px" class="input-text">
 		<button id="searchBtn" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜图片</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="edit('添加图片')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加图片</a></span> <span class="r">共有数据：<strong id="count"></strong> 条</span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="edit('添加图片')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加图片</a></span> <span class="r">共有数据：<strong id="count"></strong> 条</span><span class="r">共有：<strong id="total"></strong> 页</span><span class="r">当前：<strong id="curr"></strong> 页</span> </div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort">
 			<thead>
@@ -57,9 +57,11 @@ function loading(page, size) {
 			title : $('#title').val()
 		}
 	}).done(function(relult){
-//        console.log(relult);
+        console.log(relult);
         var content = "";
-        obj = JSON.parse(relult);
+        var obj = JSON.parse(relult.data);
+        $("#curr").html(obj.curr);
+        $("#total").html(obj.pageTotal);
         $("#count").html(obj.count);
         //分页方法
         laypage({

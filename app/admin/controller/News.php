@@ -26,7 +26,7 @@ class News extends Base{
 
     /**
      * 数据列表获取方法
-     * @return string
+     * @return string 列表数据json格式
      */
     public function listAjax(){
 
@@ -48,14 +48,15 @@ class News extends Base{
         try{
             $result = model('News')->getAll($limit,$where,$order);
         }catch (\Exception $e){
-            return $e->getMessage();
+            return $this->result($e,400,'数据库异常');
         }
 
         //当前页数
         $result['curr'] = $limit['page'];
 
         //数据转为json格式返给前端
-        return json_encode($result);
+//        return json_encode($result);
+        return $this->result(json_encode($result),200,'数据获取成功');
     }
 
     /**
@@ -82,24 +83,22 @@ class News extends Base{
             return $validate->getError();
         }
 
-        $data['status'] = 1;
-
         //将提交表单信息插入新闻表
         try{
             $id = model('News')->add($data);
         }catch (\Exception $e){
-            return $e->getMessage();
+            return $this->result($e,400,'数据库异常');
         }
 
             //如果插入成功
             if ($id){
-                return '新闻'.$id.'添加成功';
+                return $this->result($id,200,$id.'添加成功');
             }else {
-                return '添加失败';
+                return $this->result($id,500,'添加失败');
             }
 
         }else{
-            return '数据异常';
+            return $this->result(input('param.'),300,'数据不合法');
         }
     }
 

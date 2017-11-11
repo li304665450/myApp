@@ -12,7 +12,7 @@ use think\Validate;
 class News extends Validate
 {
     protected $rule = [
-        'title' => 'require|max:20',
+        'title' => 'require|max:40',
         'small_title' => 'require|max:20',
     ];
 

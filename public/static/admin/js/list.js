@@ -1,3 +1,38 @@
+
+/* 编辑页面跳转*/
+function edit(title,id){
+
+    var url = id ? edit_url+"?id="+id : edit_url;
+
+    var index = layer.open({
+        type: 2,
+        title: title,
+        content: url
+    });
+    layer.full(index);
+}
+
+/* 删除*/
+function del(obj,id){
+    layer.confirm('确认要删除吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            url: delete_url+'?id='+id,
+            dataType: 'json',
+            success: function(data){
+                console.log(data);
+                console.log(data.msg);
+                // $(obj).parents("tr").remove();
+                loading($('#curr').html());
+                layer.msg(data.msg, {icon:1,time:1000});
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });
+    });
+}
+
 /*图片-添加*/
 function picture_add(title,url){
     var index = layer.open({
@@ -63,36 +98,4 @@ function picture_shenqing(obj,id){
     $(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">待审核</span>');
     $(obj).parents("tr").find(".td-manage").html("");
     layer.msg('已提交申请，耐心等待审核!', {icon: 1,time:2000});
-}
-
-/*图片-编辑*/
-function edit(title,id){
-
-    var url = id ? edit_url+"?id="+id : edit_url;
-
-    var index = layer.open({
-        type: 2,
-        title: title,
-        content: url
-    });
-    layer.full(index);
-}
-
-/* 删除*/
-function del(obj,id){
-    layer.confirm('确认要删除吗？',function(index){
-        $.ajax({
-            type: 'POST',
-            url: delete_url+'?id='+id,
-            dataType: 'json',
-            success: function(data){
-                console.log(data);
-                $(obj).parents("tr").remove();
-                layer.msg('已删除!',{icon:1,time:1000});
-            },
-            error:function(data) {
-                console.log(data.msg);
-            },
-        });
-    });
 }
