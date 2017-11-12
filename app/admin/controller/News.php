@@ -55,51 +55,15 @@ class News extends Base{
         $result['curr'] = $limit['page'];
 
         //数据转为json格式返给前端
-//        return json_encode($result);
         return $this->result(json_encode($result),200,'数据获取成功');
     }
 
     /**
-     * 添加页面
+     * 记录编辑页面
      * @return mixed
      */
     public function edit(){
         return $this->fetch();
-    }
-
-    /**
-     * 新闻添加操作方法
-     * @return string
-     */
-    public function addAjax(){
-
-        if (request()->isPost()){
-
-        $data = input('post.');
-
-        //表单后台二次验证
-        $validate = validate('News');
-        if (!$validate->check($data)){
-            return $validate->getError();
-        }
-
-        //将提交表单信息插入新闻表
-        try{
-            $id = model('News')->add($data);
-        }catch (\Exception $e){
-            return $this->result($e,400,'数据库异常');
-        }
-
-            //如果插入成功
-            if ($id){
-                return $this->result($id,200,$id.'添加成功');
-            }else {
-                return $this->result($id,500,'添加失败');
-            }
-
-        }else{
-            return $this->result(input('param.'),300,'数据不合法');
-        }
     }
 
 }

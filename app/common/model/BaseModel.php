@@ -54,8 +54,6 @@ class BaseModel extends Model
         //分页的总页数
         $result['pageTotal'] = ceil($result['count']/$limt['size']);//总页数
 
-//        return $this->getLastSql();
-
         return $result;
 
     }

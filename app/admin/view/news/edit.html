@@ -6,6 +6,7 @@
 
 <div class="page-container">
 	<form class="form form-horizontal" id="form-news-add">
+		<input type="hidden" name="id" id="id" value=""/>
 		<input type="hidden" name="status" id="status" value="1"/>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>新闻标题：</label>
@@ -23,13 +24,13 @@
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>分类栏目：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<span class="select-box">
-				<select name="catid" id="catid" class="select">
-					<option value="0">全部栏目</option>
-					<option value="1">新闻资讯</option>
-					<option value="2">行业动态</option>
-					<option value="2">行业资讯</option>
-					<option value="2">行业新闻</option>
-				</select>
+					<select name="catid" id="catid_select" class="select">
+						<option value="0">全部栏目</option>
+						<option value="1">新闻资讯</option>
+						<option value="2">行业动态</option>
+						<option value="2">行业资讯</option>
+						<option value="2">行业新闻</option>
+					</select>
 				</span>
 			</div>
 		</div>
@@ -89,8 +90,8 @@
 			<label class="form-label col-xs-4 col-sm-2">缩略图：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 					<input id="file_upload" type="file" multiple="true"/>
-					<img src="" id="upload_images"/>
-					<input id="file_upload_image" name="image" type="hidden" multiple="true" value=""/>
+					<img src="" id="image_src"/>
+					<input id="image" name="image" type="hidden" multiple="true" value=""/>
 			</div>
 		</div>
 		<div class="row cl">
@@ -114,35 +115,15 @@
 <script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
 <script type="text/javascript" src="__STATIC__/lib/webuploader/0.1.5/webuploader.min.js"></script>
 <script type="text/javascript" src="__STATIC__/admin/uploadify/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/js/edit.js"></script>
 <script type="text/javascript" src="__STATIC__/admin/js/image.js"></script>
 <script type="text/javascript">
     $(function(){
 
-        //获取url中的参数
-        function getUrlParam(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-            var r = window.location.search.substr(1).match(reg); //匹配目标参数
-            if (r != null) return decodeURI(r[2]); return null; //返回参数值
+        //数据加载方法
+        if(getUrlParam('id')){
+            info_display(getUrlParam('id'),'{:url("infoAjax")}');
         }
-
-        alert(getUrlParam('id'));
-
-        $('.skin-minimal input').iCheck({
-            checkboxClass: 'icheckbox-blue',
-            radioClass: 'iradio-blue',
-            increaseArea: '20%'
-        });
-
-        //表单提交按钮
-        $("#sub_btn").on('click',function () {
-			$("#form-news-add").submit();
-        });
-
-        //表单提交草稿按钮
-        $("#draft_btn").on('click',function () {
-			$('#status').val(0);
-            $("#form-news-add").submit();
-        });
 
         //验证及提交操作
         $("#form-news-add").validate({
@@ -178,16 +159,21 @@
             focusCleanup:true,
             success:"valid",
             submitHandler:function(form){
+				if ($('#id').val()){
+				    var url = "{:url('updateAjax')}";
+				}else{
+				    var url = "{:url('addAjax')}";
+				}
                 $(form).ajaxSubmit({
                     type: 'post',
-                    url: "{:url('addAjax')}" ,
+                    url:  url,
                     success: function(data){
                         console.log(data);
-                        layer.msg(data,{icon:1,time:1000});
+                        layer.msg(data.msg,{icon:1,time:1000});
                         var t = setTimeout('window.location.reload()',1000);
                     },
                     error: function(XmlHttpRequest, textStatus, errorThrown){
-                        layer.msg(data,{icon:1,time:1000});
+                        layer.msg('500',{icon:1,time:1000});
                     }
                 });
 //                var index = parent.layer.getFrameIndex(window.name);

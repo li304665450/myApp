@@ -12,8 +12,9 @@ $(function() {
         onUploadSuccess : function(file, data, response){
             if(response){
                 var obj = JSON.parse(data);
-                $('#upload_images').attr('src',obj.data);
-                $('#file_upload_image').val(obj.data);
+                $('#image_src').attr('src',obj.data);
+                $('#image_src').attr('height','400');
+                $('#image').val(obj.data);
             }
         }
     });

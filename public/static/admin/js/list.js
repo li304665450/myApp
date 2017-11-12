@@ -33,15 +33,6 @@ function del(obj,id){
     });
 }
 
-/*图片-添加*/
-function picture_add(title,url){
-    var index = layer.open({
-        type: 2,
-        title: title,
-        content: url
-    });
-    layer.full(index);
-}
 
 /*图片-查看*/
 function picture_show(title,url,id){
