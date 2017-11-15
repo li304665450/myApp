@@ -26,7 +26,7 @@ class Base extends Controller{
     }
 
     /**
-     * 新闻添加操作方法
+     * 添加记录操作方法
      * @return string
      */
     public function addAjax(){
@@ -48,7 +48,7 @@ class Base extends Controller{
             try{
                 $id = model($model)->add($data);
             }catch (\Exception $e){
-                return $this->result($e,400,'数据库异常');
+                return $this->result($e->getMessage(),400,'数据库异常');
             }
 
             //如果插入成功
@@ -69,22 +69,7 @@ class Base extends Controller{
      * @return json 接口返回值，包括操作码和类型提示
      */
     public function deleteAjax($id = 0){
-
-        if (empty($id)){
-            return $this->result(input('param.'),300,'ID不合法');
-        }
-
-        //获取调用方法当前控制器名
-        $model = $this->model ? $this->model : request()->controller();
-
-        try{
-            $reult = model($model)->save(['status' => -1], ['id' => $id]);
-        }catch (\Exception $e){
-            return $this->result($e->getMessage(),400,'数据库异常');
-        }
-
-        return $this->result($reult,200,'删除成功!');
-
+        return $this->saveStatus($id,-1);
     }
 
     /**
@@ -107,7 +92,7 @@ class Base extends Controller{
             return $this->result($e->getMessage(),400,'数据库异常');
         }
 
-        return $this->result($reult,200,'操作成功!');
+        return $this->result('',200,'操作成功!');
 
     }
 
@@ -135,7 +120,7 @@ class Base extends Controller{
             try{
                 $reult = model($model)->save($data,['id' => $id]);
             }catch (\Exception $e){
-                return $this->result($e,400,'数据库异常');
+                return $this->result($e->getMessage(),400,'数据库异常');
             }
 
             return $this->result('',200,'数据更新成功');
@@ -162,14 +147,14 @@ class Base extends Controller{
             try {
                 $info = model($model)->get(['id' => $id]);
             } catch (\Exception $e) {
-                return $this->result("$e",400,'数据库异常');
+                return $this->result($e->getMessage(),400,'数据库异常');
             }
 
             //返回结果转为json格式
             $info = json_encode($info);
 
             //数据转为json格式返给前端
-            return $this->result("$info",200,'数据获取成功');
+            return $this->result($info,200,'数据获取成功');
 
         }else{
             return $this->result(input('param.'),300,'数据不合法');
