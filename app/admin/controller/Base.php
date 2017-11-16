@@ -132,6 +132,79 @@ class Base extends Controller{
     }
 
     /**
+     * 数据列表获取方法
+     * @return string 列表数据json格式
+     */
+    public function listAjax(){
+
+        $data = input('param.');
+
+        $limit['page'] = !empty($data['page']) ? $data['page'] : 1;//页数
+        $limit['size'] = !empty($data['size']) ? $data['size'] : config('paginate.list_rows');//每页条数
+
+        //循环扩展检索条件
+        foreach ($data as $k => $v){
+            //将页数和每页条数先去掉
+            if ($k == 'page' || $k == 'size'){
+                unset($data[$k]);
+                break;
+            }
+            //分解条件和字段名
+            $arr = explode(".",$k);
+
+            switch ($arr[0]){
+                case 'like':
+                    $where[$arr[1]] = [$arr[0], '%'.$v.'%'];
+                    break;
+                case 'likemore':
+                    $condition = $arr[1];
+                    for ($i = 2; $i < count($arr); $i++){
+                        $condition += '|'.$arr[$i];
+                    }
+                    $where[$condition] = [$arr[0], '%'.$v.'%'];
+                    break;
+                case 'equalmore':
+                    $condition = $arr[1];
+                    for ($i = 2; $i < count($arr); $i++){
+                        $condition += '|'.$arr[$i];
+                    }
+                    $where[$condition] = $v;
+                    break;
+                case 'greater':
+                    $where[$arr[1]] = ['>', $v];
+                    break;
+                case 'less':
+                    $where[$arr[1]] = ['<', $v];
+                    break;
+                case 'neq':
+                    $where[$arr[1]] = [$arr[0], $v];
+                    break;
+                default:
+                    $where[$arr[1]] = $v;
+            }
+        }
+
+        //补充检索条件
+        $where['status'] = ['neq', -1];
+
+        //排序要求
+        $order = ['id' => 'desc'];
+
+        //查询数据表
+        try{
+            $result = model('News')->getAll($limit,$where,$order);
+        }catch (\Exception $e){
+            return $this->result($e,400,'数据库异常');
+        }
+
+        //当前页数
+        $result['curr'] = $limit['page'];
+
+        //数据转为json格式返给前端
+        return $this->result(json_encode($result),200,'数据获取成功');
+    }
+
+    /**
      * 获取记录详情
      * @param int $id 记录id
      * @return string 列表数据json格式
