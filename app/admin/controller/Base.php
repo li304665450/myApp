@@ -163,18 +163,18 @@ class Base extends Controller{
                     }
                     $where[$condition] = [$arr[0], '%'.$v.'%'];
                     break;
-                case 'equalmore':
+                case 'eqmore':
                     $condition = $arr[1];
                     for ($i = 2; $i < count($arr); $i++){
                         $condition += '|'.$arr[$i];
                     }
                     $where[$condition] = $v;
                     break;
-                case 'greater':
-                    $where[$arr[1]] = ['>', $v];
+                case 'gt':
+                    $where[$arr[1]] = [$arr[0], $v];
                     break;
-                case 'less':
-                    $where[$arr[1]] = ['<', $v];
+                case 'lt':
+                    $where[$arr[1]] = [$arr[0], $v];
                     break;
                 case 'neq':
                     $where[$arr[1]] = [$arr[0], $v];
