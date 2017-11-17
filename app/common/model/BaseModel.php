@@ -47,6 +47,8 @@ class BaseModel extends Model
             ->limit($start,$limt['size'])
             ->select();
 
+//        return $this->getLastSql();
+
         //未分页的记录总条数
         $result['count'] = $this->where($where)
             ->count();

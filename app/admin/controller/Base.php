@@ -144,43 +144,41 @@ class Base extends Controller{
 
         //循环扩展检索条件
         foreach ($data as $k => $v){
+
             //将页数和每页条数先去掉
             if ($k == 'page' || $k == 'size'){
                 unset($data[$k]);
                 break;
             }
-            //分解条件和字段名
-            $arr = explode(".",$k);
 
-            switch ($arr[0]){
-                case 'like':
-                    $where[$arr[1]] = [$arr[0], '%'.$v.'%'];
-                    break;
-                case 'likemore':
-                    $condition = $arr[1];
-                    for ($i = 2; $i < count($arr); $i++){
-                        $condition += '|'.$arr[$i];
-                    }
-                    $where[$condition] = [$arr[0], '%'.$v.'%'];
-                    break;
-                case 'eqmore':
-                    $condition = $arr[1];
-                    for ($i = 2; $i < count($arr); $i++){
-                        $condition += '|'.$arr[$i];
-                    }
-                    $where[$condition] = $v;
-                    break;
-                case 'gt':
-                    $where[$arr[1]] = [$arr[0], $v];
-                    break;
-                case 'lt':
-                    $where[$arr[1]] = [$arr[0], $v];
-                    break;
-                case 'neq':
-                    $where[$arr[1]] = [$arr[0], $v];
-                    break;
-                default:
-                    $where[$arr[1]] = $v;
+            //分解条件和字段名
+            $arr = explode("-",$k);
+
+            if (empty($arr[1])){
+                $where[$arr[0]] = $v;
+            }else{
+                switch ($arr[0]){
+                    case 'like':
+                        $where[$arr[1]] = [$arr[0], '%'.$v.'%'];
+                        break;
+                    case 'likemore'://多字段或连接like
+                        $condition = $arr[1];
+                        for ($i = 2; $i < count($arr); $i++){
+                            $condition .= '|'.$arr[$i];
+                        }
+                        $where[$condition] = ['like', '%'.$v.'%'];
+                        break;
+                    case 'eqmore'://多字段或连接等于
+                        $condition = $arr[1];
+                        for ($i = 2; $i < count($arr); $i++){
+                            $condition .= '|'.$arr[$i];
+                        }
+                        $where[$condition] = $v;
+                        break;
+                    default:
+                        $where[$arr[1]] = [$arr[0], $v];
+                        break;
+                }
             }
         }
 
@@ -190,9 +188,15 @@ class Base extends Controller{
         //排序要求
         $order = ['id' => 'desc'];
 
+        //查询开始点
+        $start = ($limit['page'] - 1) * $limit['size'];
+
         //查询数据表
         try{
-            $result = model('News')->getAll($limit,$where,$order);
+            $result['list'] = model('News')->where($where)
+                ->order($order)
+                ->limit($start,$limit['size'])
+                ->select();
         }catch (\Exception $e){
             return $this->result($e,400,'数据库异常');
         }
@@ -233,6 +237,15 @@ class Base extends Controller{
             return $this->result(input('param.'),300,'数据不合法');
         }
 
+    }
+
+    public function test(){
+        $where['small_title |title'] = ['like', '%1%'];
+        dump($where);
+        $model =  model('News');
+        $result['list'] = $model->where($where)->select();
+        echo $model->getLastSql();
+        dump(json_encode($result));
     }
 
 }

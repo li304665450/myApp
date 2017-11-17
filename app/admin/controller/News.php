@@ -25,10 +25,10 @@ class News extends Base{
     }
 
     /**
-     * 数据列表获取方法
+     * 新闻列表获取方法
      * @return string 列表数据json格式
      */
-    public function listAjax(){
+    public function newsAjax(){
 
         $data = input('param.');
 

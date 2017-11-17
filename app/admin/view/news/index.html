@@ -50,11 +50,11 @@
 function loading(page, size) {
 	$.ajax({
 		type : "POST",
-		url : '{:url("listAjax")}',
+		url : '{:url("newsAjax")}',
 		data : {
 			page : page,
 			size : size,
-			title : $('#title').val()
+			'eq.title' : $('#title').val()
 		}
 	}).done(function(relult){
         console.log(relult);
