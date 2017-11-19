@@ -36,25 +36,26 @@ class BaseModel extends Model
      * @param array $order 排序方式
      * @return mixed list数据列表 count结果条数 pageTotal总页数
      */
-    public function getAll($limt = [],$where = [],$order = []){
+    public function getAll($limit = [],$where = [],$order = []){
 
         //查询开始点
-        $start = ($limt['page'] - 1) * $limt['size'];
+        $start = ($limit['page'] - 1) * $limit['size'];
 
         //符合条件的分页数据列表
         $result['list'] = $this->where($where)
             ->order($order)
-            ->limit($start,$limt['size'])
+            ->limit($start,$limit['size'])
             ->select();
-
-//        return $this->getLastSql();
 
         //未分页的记录总条数
         $result['count'] = $this->where($where)
             ->count();
 
         //分页的总页数
-        $result['pageTotal'] = ceil($result['count']/$limt['size']);//总页数
+        $result['pageTotal'] = ceil($result['count']/$limit['size']);
+
+        //当前页数
+        $result['curr'] = $limit['page'];
 
         return $result;
 

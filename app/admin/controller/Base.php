@@ -64,39 +64,6 @@ class Base extends Controller{
     }
 
     /**
-     * 删除记录方法
-     * @param int $id 删除的记录id
-     * @return json 接口返回值，包括操作码和类型提示
-     */
-    public function deleteAjax($id = 0){
-        return $this->saveStatus($id,-1);
-    }
-
-    /**
-     * 记录状态操作方法
-     * @param $id 记录id
-     * @param $status 状态值
-     */
-    public function saveStatus($id,$status){
-
-        if (empty($id)){
-            return $this->result(input('param.'),300,'ID不合法');
-        }
-
-        //获取调用方法当前控制器名
-        $model = $this->model ? $this->model : request()->controller();
-
-        try{
-            $reult = model($model)->save(['status' => $status], ['id' => $id]);
-        }catch (\Exception $e){
-            return $this->result($e->getMessage(),400,'数据库异常');
-        }
-
-        return $this->result('',200,'操作成功!');
-
-    }
-
-    /**
      * 数据更新方法
      * @return json 接口返回值，包括操作码和类型提示
      */
@@ -123,7 +90,7 @@ class Base extends Controller{
                 return $this->result($e->getMessage(),400,'数据库异常');
             }
 
-            return $this->result('',200,'数据更新成功');
+            return $this->result($reult,200,'操作成功');
 
         }
 
@@ -146,12 +113,12 @@ class Base extends Controller{
         foreach ($data as $k => $v){
 
             //将页数和每页条数先去掉
-            if ($k == 'page' || $k == 'size'){
+            if ($k == 'page' || $k == 'size' || empty($v)){
                 unset($data[$k]);
                 break;
             }
 
-            //分解条件和字段名
+            //解析条件和字段名
             $arr = explode("-",$k);
 
             if (empty($arr[1])){
@@ -188,21 +155,15 @@ class Base extends Controller{
         //排序要求
         $order = ['id' => 'desc'];
 
-        //查询开始点
-        $start = ($limit['page'] - 1) * $limit['size'];
+        //获取调用方法当前控制器名
+        $model = $this->model ? $this->model : request()->controller();
 
         //查询数据表
         try{
-            $result['list'] = model('News')->where($where)
-                ->order($order)
-                ->limit($start,$limit['size'])
-                ->select();
+            $result = model($model)->getAll($limit,$where,$order);
         }catch (\Exception $e){
             return $this->result($e,400,'数据库异常');
         }
-
-        //当前页数
-        $result['curr'] = $limit['page'];
 
         //数据转为json格式返给前端
         return $this->result(json_encode($result),200,'数据获取成功');
@@ -237,15 +198,6 @@ class Base extends Controller{
             return $this->result(input('param.'),300,'数据不合法');
         }
 
-    }
-
-    public function test(){
-        $where['small_title |title'] = ['like', '%1%'];
-        dump($where);
-        $model =  model('News');
-        $result['list'] = $model->where($where)->select();
-        echo $model->getLastSql();
-        dump(json_encode($result));
     }
 
 }
