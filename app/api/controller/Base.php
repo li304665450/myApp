@@ -14,6 +14,14 @@ use think\Controller;
 class Base extends Controller{
 
     /**
+     * 初始化方法
+     */
+    public function _initialize()
+    {
+        $this->checkRequestAuth();
+    }
+
+    /**
      * @param $status 业务状态码
      * @param $msg 提示信息
      * @param array $data 数据
@@ -27,5 +35,13 @@ class Base extends Controller{
             'data' => $data
         ];
         return json($result, $httpCode);
+    }
+
+    public function checkRequestAuth(){
+
+        //获取header中的数据
+        $header = request()->header();
+
+        halt($header);
     }
 }
