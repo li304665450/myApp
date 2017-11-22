@@ -63,7 +63,9 @@ function loading(page, size) {
 		data : {
 			page : page,
 			size : size,
-			'likemore-title-small_title' : $('#title').val()
+			'likemore-title-small_title' : $('#title').val(),
+			'gt-update_time' : $('#countTimestart').val(),
+            'lt-update_time' : $('#countTimeend').val()
 		}
 	}).done(function(relult){
         console.log(relult);

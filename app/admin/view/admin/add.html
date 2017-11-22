@@ -69,11 +69,11 @@ $(function(){
 				url: "{:url('addAjax')}" ,
 				success: function(data){
 				    console.log(data);
-					layer.msg(data,{icon:1,time:1000});
+					layer.msg(data.msg,{icon:1,time:1000});
 					var t = setTimeout('window.location.reload()',1000);
 				},
                 error: function(XmlHttpRequest, textStatus, errorThrown){
-					layer.msg(data,{icon:1,time:1000});
+					layer.msg(data.msg,{icon:1,time:1000});
 				}
 			});
 //			var index = parent.layer.getFrameIndex(window.name);
