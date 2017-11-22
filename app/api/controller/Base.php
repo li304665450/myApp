@@ -9,6 +9,7 @@
 namespace app\api\controller;
 
 
+use app\common\lib\Aes;
 use think\Controller;
 
 class Base extends Controller{
@@ -18,7 +19,7 @@ class Base extends Controller{
      */
     public function _initialize()
     {
-        $this->checkRequestAuth();
+        $this->saveAes();
     }
 
     /**
@@ -43,5 +44,10 @@ class Base extends Controller{
         $header = request()->header();
 
         halt($header);
+    }
+
+    public function saveAes(){
+        $aes = new Aes();
+        halt($aes->encrypt('?id=3&name=Tom&sex=man'));
     }
 }
