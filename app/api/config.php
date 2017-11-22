@@ -9,12 +9,16 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-use think\Route;
+return [
+    // +----------------------------------------------------------------------
+    // | api分组设置
+    // +----------------------------------------------------------------------
 
-Route::alias('home','index/index/home');
+    // 应用调试模式
+    'app_debug'              => false,
+    // 默认输出类型
+    'default_return_type'    => 'json',
+    // 异常处理handle类 留空使用 \think\exception\Handle
+    'exception_handle'       => 'app\common\lib\exception\ApiHandleException',
 
-Route::get('test','api/test/index');
-
-Route::put('test/:id', 'api/test/update');
-
-Route::resource('test', 'api/test');
+];
