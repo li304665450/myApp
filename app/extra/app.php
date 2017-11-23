@@ -7,5 +7,5 @@
  */
 return [
     'password_pre_halt'  => '_#string_try',//密码加密盐
-    'aeskey' => 'ssg445566app',//aes密钥
+    'aeskey' => 'ssg445566appccaa',//aes密钥
 ];

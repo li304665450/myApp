@@ -24,7 +24,7 @@ class Aes {
      * @return String
      */
     public function __construct() {
-        // 需要小伙伴在配置文件app.php中定义aeskey
+        // 需要在配置文件app.php中定义aeskey
         $this->key = config('app.aeskey');
     }
 

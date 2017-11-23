@@ -17,4 +17,23 @@ class IAuth{
     public static function setPassword($data){
         return md5($data.config('app.password_pre_halt'));
     }
+
+    /**
+     * 生成sign
+     * @param array $data
+     * @return string
+     */
+    public static function setSign($data = []){
+        //按字段排序
+        ksort($data);
+        //拼接字符串数据
+        $str = http_build_query($data);
+        //aes加密
+        $str = (new Aes())->encrypt($str);
+        //所有字符转换大写
+//        $str = strtoupper($str);
+
+        return $str;
+    }
+
 }

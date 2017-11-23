@@ -10,6 +10,7 @@ namespace app\api\controller;
 
 
 use app\common\lib\Aes;
+use app\common\lib\IAuth;
 use think\Controller;
 
 class Base extends Controller{
@@ -19,7 +20,7 @@ class Base extends Controller{
      */
     public function _initialize()
     {
-        $this->saveAes();
+        $this->testSign();
     }
 
     /**
@@ -46,8 +47,22 @@ class Base extends Controller{
         halt($header);
     }
 
+    public function testSign(){
+        $data = [
+            'did' => '12345g',
+            'version' => 1
+        ];
+        $sign = IAuth::setSign($data);
+        $str = 'FZzH02huZnKg63XF8gunWH37QMSPeui0q8Ep769vEMY=';
+        $sign = (new Aes())->decrypt($str);
+        echo $sign;exit();
+    }
+
     public function saveAes(){
         $aes = new Aes();
-        halt($aes->encrypt('?id=3&name=Tom&sex=man'));
+        $str = $aes->encrypt('?id=3&name=Tom&sex=man');
+        echo $aes->decrypt($str);exit();
+        halt($aes->decrypt($str));
+        halt($str);
     }
 }

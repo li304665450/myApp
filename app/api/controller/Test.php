@@ -27,10 +27,10 @@ class Test extends Base
 
     public function  save(){
 //        model('aaa');
-        $data = input('post.');
-        if ($data['mt'] != 1){
-            throw new ApiException('数据不合法唉！',402);
-        }
+//        $data = input('post.');
+//        if ($data['mt'] != 1){
+//            throw new ApiException('数据不合法唉！',402);
+//        }
        return $this->apiResult(1,'ok',input('post.'),201);
     }
 
