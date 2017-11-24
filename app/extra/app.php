@@ -8,4 +8,7 @@
 return [
     'password_pre_halt'  => '_#string_try',//密码加密盐
     'aeskey' => 'ssg445566appccaa',//aes密钥
+    'app_types' => ['ios', 'android'],//服务端设备类型
+    'app_sign_time' => 1000000,//sign授权码过期时间
+    'app_sign_cache_time' => 20,//sign授权码缓存失效时间
 ];

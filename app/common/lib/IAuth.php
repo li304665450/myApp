@@ -7,6 +7,12 @@
  */
 namespace app\common\lib;
 
+use think\Cache;
+
+/**
+ * Class IAuth
+ * @package app\common\lib
+ */
 class IAuth{
 
     /**
@@ -30,10 +36,45 @@ class IAuth{
         $str = http_build_query($data);
         //aes加密
         $str = (new Aes())->encrypt($str);
-        //所有字符转换大写
-//        $str = strtoupper($str);
 
         return $str;
+    }
+
+    /**
+     * 检查sign是否正常
+     * @param $header header信息
+     * @return bool
+     */
+    public static function checkSignPass($header){
+
+        //解密
+        $str = (new Aes())->decrypt($header['sign']);
+
+        if (empty($str)){
+            return false;
+        }
+
+        //将解密后的http参数转为数组
+        parse_str($str,$arr);
+
+        if (!is_array($arr)){
+            return false;
+        }
+        //校验sign中的did和header中传递的did
+        if (empty($arr['did']) || $arr['did'] != $header['did']){
+            return false;
+        }
+        //时间校验，大于配置时间失效
+        if (time() - ceil($arr['time'] / 1000) > config('app.app_sign_time')){
+            return false;
+        }
+        //sign唯一判断
+        if (Cache::get($header['sign'])){
+            return false;
+        }
+
+
+        return true;
     }
 
 }

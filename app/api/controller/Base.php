@@ -9,60 +9,73 @@
 namespace app\api\controller;
 
 
-use app\common\lib\Aes;
+use app\common\lib\exception\ApiException;
 use app\common\lib\IAuth;
+use app\common\lib\Time;
+use think\Cache;
 use think\Controller;
 
+/**
+ * api请求基类
+ * Class Base
+ * @package app\api\controller
+ */
 class Base extends Controller{
+
+    /**
+     * @var string header头信息
+     */
+    public $header = '';
 
     /**
      * 初始化方法
      */
     public function _initialize()
     {
-        $this->testSign();
+        $this->checkRequestAuth();
+//        $this->testSign();
     }
 
     /**
-     * @param $status 业务状态码
-     * @param $msg 提示信息
-     * @param array $data 数据
-     * @param int $httpCode http状态码
-     * @return \think\response\Json
+     * 请求合法性校验方法
+     * @throws ApiException
      */
-    public function apiResult($status, $msg, $data = [], $httpCode = 200){
-        $result = [
-            'status' => $status,
-            'msg' => $msg,
-            'data' => $data
-        ];
-        return json($result, $httpCode);
-    }
-
     public function checkRequestAuth(){
 
         //获取header中的数据
         $header = request()->header();
 
-        halt($header);
+        //基础数据校验
+        if (empty($header['sign'])){
+            throw new ApiException('sign 不存在', 400);
+        }
+
+        //设备类型校验
+        if (empty($header['app_type']) || !in_array($header['app_type'], config('app.app_types'))){
+            throw new ApiException('app_type 不合法', 400);
+        }
+
+        //校验sign格式
+        if (!IAuth::checkSignPass($header)){
+            throw new ApiException('sign授权码校验失败', 401);
+        }
+
+        //对使用过的sign设置使用状态
+        Cache::set($header['sign'], 1, config('app.app_sign_cache_time'));
+
+        $this->header = $header;
     }
 
     public function testSign(){
         $data = [
             'did' => '12345g',
-            'version' => 1
+            'version' => 1,
+            'time' => Time::getThirteenTime(),
         ];
+//        halt($data);
+        //emNTQ9Xhfmd3hd0pXWR3xMk5P0B8fGDJAfwNr7WIge3zhGh2n+dEtXXZfEUxlVgM
         $sign = IAuth::setSign($data);
-        $str = 'FZzH02huZnKg63XF8gunWH37QMSPeui0q8Ep769vEMY=';
-        $sign = (new Aes())->decrypt($str);
         echo $sign;exit();
     }
 
-    public function saveAes(){
-        $aes = new Aes();
-        $str = $aes->encrypt('?id=3&name=Tom&sex=man');
-        echo $aes->decrypt($str);exit();
-        halt($aes->decrypt($str));
-        halt($str);
-    }
 }

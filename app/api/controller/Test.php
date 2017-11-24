@@ -31,7 +31,7 @@ class Test extends Base
 //        if ($data['mt'] != 1){
 //            throw new ApiException('数据不合法唉！',402);
 //        }
-       return $this->apiResult(1,'ok',input('post.'),201);
+       return apiResult(1,'ok',input('post.'),201);
     }
 
     public function showConfig(){
