@@ -32,7 +32,7 @@ class Base extends Controller{
      */
     public function _initialize()
     {
-        $this->checkRequestAuth();
+//        $this->checkRequestAuth();
 //        $this->testSign();
     }
 

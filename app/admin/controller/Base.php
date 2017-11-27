@@ -41,7 +41,7 @@ class Base extends Controller{
             //表单后台二次验证
             $validate = validate($model);
             if (!$validate->check($data)){
-                return $this->result(input('post.'),300,$validate->getError());
+                return $this->result($data,300,$validate->getError());
             }
 
             //将提交表单信息插入新闻表
@@ -104,63 +104,14 @@ class Base extends Controller{
      */
     public function listAjax(){
 
-        $data = input('param.');
-
-        $limit['page'] = !empty($data['page']) ? $data['page'] : 1;//页数
-        $limit['size'] = !empty($data['size']) ? $data['size'] : config('paginate.list_rows');//每页条数
-
-        //循环扩展检索条件
-        foreach ($data as $k => $v){
-
-            //将页数和每页条数先去掉
-            if ($k == 'page' || $k == 'size' || empty($v)){
-                unset($data[$k]);
-                break;
-            }
-
-            //解析条件和字段名
-            $arr = explode("-",$k);
-
-            if (empty($arr[1])){
-                $where[$arr[0]] = $v;
-            }else{
-                switch ($arr[0]){
-                    case 'like':
-                        $where[$arr[1]] = [$arr[0], '%'.$v.'%'];
-                        break;
-                    case 'likemore'://多字段或连接like
-                        $condition = $arr[1];
-                        for ($i = 2; $i < count($arr); $i++){
-                            $condition .= '|'.$arr[$i];
-                        }
-                        $where[$condition] = ['like', '%'.$v.'%'];
-                        break;
-                    case 'eqmore'://多字段或连接等于
-                        $condition = $arr[1];
-                        for ($i = 2; $i < count($arr); $i++){
-                            $condition .= '|'.$arr[$i];
-                        }
-                        $where[$condition] = $v;
-                        break;
-                    default:
-                        $where[$arr[1]] = [$arr[0], $v];
-                        break;
-                }
-            }
-        }
-
-        //补充检索条件
-        $where['status'] = ['neq', -1];
-
-        //排序要求
-        $order = ['id' => 'desc'];
+        $result = $this->splitData(input('post.'));
 
         //获取调用方法当前控制器名
         $model = $this->model ? $this->model : request()->controller();
 
         //查询数据表
         try{
-            $result = model($model)->getAll($limit,$where,$order);
+            $result = model($model)->getAll($result['limit'],$result['where'],$result['order']);
         }catch (\Exception $e){
             return $this->result($e,400,'数据库异常');
         }
@@ -197,6 +148,97 @@ class Base extends Controller{
         }else{
             return $this->result(input('param.'),300,'数据不合法');
         }
+
+    }
+
+    /**
+     * 对列表页传入参数进行整理匹配
+     * @param array $data 传入数组
+     * @return mixed 返回整理后参数
+     */
+    public function splitData($data = []){
+
+        $limit['page'] = !empty($data['page']) ? $data['page'] : 1;//页数
+        $limit['size'] = !empty($data['size']) ? $data['size'] : config('paginate.list_rows');//每页条数
+
+        $where = $this->setWhere();//设置默认筛选条件
+
+        $order = $this->setOrder();//设置默认排序规则
+
+        //循环扩展检索条件
+        foreach ($data as $k => $v){
+
+            //将页数和每页条数先去掉
+            if ($k == 'page' || $k == 'size' || empty($v)){
+                unset($data[$k]);
+                break;
+            }
+
+            //解析条件和字段名
+            $arr = explode("-",$k);
+
+            if (empty($arr[1])){
+                $where[$arr[0]] = $v;
+            }else{
+                switch ($arr[0]){
+                    case 'like':
+                        $where[$arr[1]] = [$arr[0], '%'.$v.'%'];
+                        break;
+                    case 'likemore'://多字段或连接like
+                        $condition = $arr[1];
+                        for ($i = 2; $i < count($arr); $i++){
+                            $condition .= '|'.$arr[$i];
+                        }
+                        $where[$condition] = ['like', '%'.$v.'%'];
+                        break;
+                    case 'eqmore'://多字段或连接等于
+                        $condition = $arr[1];
+                        for ($i = 2; $i < count($arr); $i++){
+                            $condition .= '|'.$arr[$i];
+                        }
+                        $where[$condition] = $v;
+                        break;
+                    case 'order'://排序规则
+                        for ($i = 1; $i < count($arr) - 1; $i+=2){
+                            $order[] = [$arr[$i] => $arr[$i+1]];
+                        }
+                    default:
+                        $where[$arr[1]] = [$arr[0], $v];
+                        break;
+                }
+            }
+        }
+
+        $result['limit'] = $limit;//分页条件
+        $result['where'] = $where;//检索条件
+        $result['order'] = $order;//排序规则
+
+        return $result;
+
+    }
+
+    /**
+     * 设置共有检索条件，可被覆盖
+     * @return mixed
+     */
+    public function setWhere(){
+
+        //状态不为-1
+        $where['status'] = ['neq', -1];
+
+        return $where;
+    }
+
+    /**
+     * 设置默认排序规则，不可被覆盖
+     * @return array
+     */
+    public function setOrder(){
+
+        //按id倒叙
+        $order[] = ['id' => 'desc'];
+
+        return $order;
 
     }
 
