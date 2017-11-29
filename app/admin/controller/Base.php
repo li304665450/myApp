@@ -104,6 +104,7 @@ class Base extends Controller{
      */
     public function listAjax(){
 
+        //整理筛选获取条件
         $result = $this->splitData(input('post.'));
 
         //获取调用方法当前控制器名

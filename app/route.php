@@ -11,12 +11,6 @@
 
 use think\Route;
 
-Route::alias('home','index/index/home');
-
-Route::get('test','api/test/index');
-
-Route::put('test/:id', 'api/test/update');
-
 Route::resource('test', 'api/test');
 
 Route::resource(':ver/cat', 'api/:ver.cat');

@@ -10,6 +10,7 @@ namespace app\api\controller;
 
 
 use app\common\lib\exception\ApiException;
+use app\common\lib\IAuth;
 
 class Test extends Base
 {
@@ -36,5 +37,9 @@ class Test extends Base
 
     public function showConfig(){
         return config();
+    }
+
+    public function token(){
+        return IAuth::setAppLoginToke(15600017090);
     }
 }
