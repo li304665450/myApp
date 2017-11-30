@@ -12,7 +12,7 @@ namespace app\api\controller;
 use app\common\lib\exception\ApiException;
 use app\common\lib\IAuth;
 
-class Test extends Base
+class Test extends AuthBase
 {
     public function index(){
         return [
@@ -32,7 +32,7 @@ class Test extends Base
 //        if ($data['mt'] != 1){
 //            throw new ApiException('数据不合法唉！',402);
 //        }
-       return apiResult(1,'ok',input('post.'),201);
+       return apiResult(1,'ok', $this->user,201);
     }
 
     public function showConfig(){

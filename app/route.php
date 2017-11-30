@@ -14,3 +14,5 @@ use think\Route;
 Route::resource('test', 'api/test');
 
 Route::resource(':ver/cat', 'api/:ver.cat');
+
+Route::resource('login/:ver', 'api/:ver.login');
