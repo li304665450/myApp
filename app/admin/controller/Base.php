@@ -222,7 +222,7 @@ class Base extends Controller{
         }
 
         //获取记录详情数据
-        $result = model($this->getModel())->get(['id' => $id]);
+        $result = model($this->getModel())->getInfor($id);
 
         //数据转为json格式返给前端
         return json($result,200);

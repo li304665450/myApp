@@ -8,8 +8,8 @@ function info_display(id,url) {
             id: id
         }
     }).done(function (relult) {
-        // console.log(relult);
-        $.each(relult,function(index,value){
+        console.log(relult);
+        $.each(relult.data,function(index,value){
             $('#'+index).val(value);
             $('#'+index+'_select').find("option[value="+value+"]").attr("selected",true);
             $('#image_src').attr('height','400');
@@ -20,6 +20,7 @@ function info_display(id,url) {
         })
     })
 }
+console.log(save_url);
 
 //checkbox样式加载
 $('.skin-minimal input').iCheck({
