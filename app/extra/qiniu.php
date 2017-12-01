@@ -9,5 +9,5 @@ return [
     'ak' => 'lYpK7qQhIRWdVQJjgKtaB_uPl5xKgAjXcNj_98vV',
     'sk' => 'zfuqLzn8tGP9fYHfV6I6gX6KM3V6wLiJTbytR5_2',
     'bucket' => 'myapp',
-    'image_url' => 'http://oyrr3hp3h.bkt.clouddn.com'
+    'image_url' => 'http://oyrr3hp3h.bkt.clouddn.com/'
 ];

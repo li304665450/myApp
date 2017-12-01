@@ -56,7 +56,7 @@ class Image extends Base{
 
         //判断上传回调信息，返回接口信息
         if ($image){
-            return apiResult(1,'上传成功！',config('qiniu.image_url').'/'.$image);
+            return apiResult(1,'上传成功！',config('qiniu.image_url').$image);
         }else{
             return apiResult(0,'上传失败！');
         }
