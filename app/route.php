@@ -13,6 +13,11 @@ use think\Route;
 
 Route::resource('test', 'api/test');
 
+//栏目
 Route::resource(':ver/cat', 'api/:ver.cat');
 
+//登陆
 Route::resource('login/:ver', 'api/:ver.login');
+
+//图片
+Route::resource('image/:ver', 'api/:ver.image');

@@ -77,15 +77,11 @@ class Login extends Base {
             'phone' => $param['phone']
         ];
 
-        try{
-            $id = model('User')->add($data);
-        }catch (\Exception $e){
-            throw new ApiException('数据库异常:');
-        }
+        $add = model('User')->add($data);
 
-        if ($id){
+        if ($add['data']){
             $result = [
-                'token' => (new Aes())->encrypt($data['token'].'||'.$id.'||'.time())
+                'token' => (new Aes())->encrypt($data['token'].'||'.$add['data'].'||'.time())
             ];
             return apiResult(1,'登陆成功！', $result,200);
         }

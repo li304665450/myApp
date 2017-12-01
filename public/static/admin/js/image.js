@@ -1,7 +1,4 @@
 $(function() {
-    // console.log(swf);
-    // console.log(upload_url);
-    // console.log(public_url);
     $("#file_upload").uploadify({
         swf           : swf,
         uploader      : upload_url,
@@ -9,12 +6,11 @@ $(function() {
         'fileTypeDesc' : 'Image Files',
         'fileTypeExts' : '*.gif; *.jpg; *.png',
         'fileObjName' : 'file',
-        onUploadSuccess : function(file, data, response){
+        onUploadSuccess : function(file, result, response){
             if(response){
-                var obj = JSON.parse(data);
-                $('#image_src').attr('src',obj.data);
+                $('#image_src').attr('src',result.data);
                 $('#image_src').attr('height','400');
-                $('#image').val(obj.data);
+                $('#image').val(result.data);
             }
         }
     });

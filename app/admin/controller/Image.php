@@ -8,6 +8,7 @@
 namespace app\admin\controller;
 
 use app\admin\controller\Base;
+use app\common\lib\exception\ApiException;
 use think\Request;
 use app\common\lib\Upload;
 use Qiniu\Auth;
@@ -34,18 +35,10 @@ class Image extends Base{
 
         //视成功与否返回接口数据
         if ($info && $info->getPathname()){
-            $data = [
-                'status' => 1,
-                'message' => 'OK',
-                'data' => $info->getPathname()
-            ];
+            return apiResult(1,'上传成功！',$info->getPathname());
         }else{
-            $data = [
-                'status' => 0,
-                'message' => 'Upload is error'
-            ];
+            return apiResult(0,'上传失败！');
         }
-        return json_encode($data);
     }
 
     /**
@@ -57,24 +50,16 @@ class Image extends Base{
         try{
             $image = Upload::image();
         }catch (\Exception $exception){
+            throw new ApiException('上传失败！');
             return json_encode(['status' => 0, 'message' => 'Upload is error']);
         }
 
         //判断上传回调信息，返回接口信息
         if ($image){
-            $data = [
-                'status' => 1,
-                'message' => 'OK',
-                'data' => config('qiniu.image_url').'/'.$image
-            ];
+            return apiResult(1,'上传成功！',config('qiniu.image_url').'/'.$image);
         }else{
-            $data = [
-                'status' => 0,
-                'message' => 'Upload is error'
-            ];
+            return apiResult(0,'上传失败！');
         }
-        return json_encode($data);
-
     }
 
 }

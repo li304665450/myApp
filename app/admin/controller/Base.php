@@ -69,7 +69,6 @@ class Base extends Controller{
         $validate = validate($model);
         if (!$validate->check($data)){
             throw new ApiException('非法数据！',303);
-//            return apiResult(1,'非法数据！', '',303);
         }
     }
 
@@ -168,7 +167,6 @@ class Base extends Controller{
         //必须为post提交
         if (!request()->isPost()){
             throw new ApiException('没有权限',403);
-//            return apiResult(0,'没有权限', '',403);
         }
 
         $data = input('post.');
