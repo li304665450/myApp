@@ -84,7 +84,7 @@ function picture_shenqing(obj,id){
 function statusSave(id, status) {
     $.ajax({
         type : "POST",
-        url : update_url,
+        url : save_url,
         data : {
             id : id,
             status : status

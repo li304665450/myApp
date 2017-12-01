@@ -70,7 +70,8 @@ function loading(page, size) {
 	}).done(function(relult){
         console.log(relult);
         var content = "";
-        var obj = JSON.parse(relult.data);
+//        var obj = JSON.parse(relult.data);
+		var obj = relult.data;
         $("#curr").html(obj.curr);
         $("#total").html(obj.pageTotal);
         $("#count").html(obj.count);

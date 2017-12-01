@@ -7,6 +7,7 @@
  */
 namespace app\admin\controller;
 
+use app\common\lib\exception\ApiException;
 use think\Controller;
 
 class Base extends Controller{
@@ -26,130 +27,70 @@ class Base extends Controller{
     }
 
     /**
-     * 添加记录操作方法
-     * @return string
+     * 获取调用方法当前控制器名
+     * @return string|\think\Request
      */
-    public function addAjax(){
+    public function getModel(){
+        return $this->model ? $this->model : request()->controller();
+    }
 
-        if (request()->isPost()){
+    /**
+     * 设置共有检索条件，设置条件可被覆盖
+     * @return mixed
+     */
+    public function setWhere(){
 
-            $data = input('post.');
+        //状态不为-1
+        $where['status'] = ['neq', -1];
 
-            //获取调用方法当前控制器名
-            $model = $this->model ? $this->model : request()->controller();
+        return $where;
+    }
 
-            //表单后台二次验证
-            $validate = validate($model);
-            if (!$validate->check($data)){
-                return $this->result($data,300,$validate->getError());
-            }
+    /**
+     * 设置默认排序规则，设置规则不可被覆盖
+     * @return array
+     */
+    public function setOrder(){
 
-            //将提交表单信息插入新闻表
-            try{
-                $id = model($model)->add($data);
-            }catch (\Exception $e){
-                return $this->result($e->getMessage(),400,'数据库异常');
-            }
+        //按id倒叙
+        $order = ['id' => 'desc'];
 
-            //如果插入成功
-            if ($id){
-                return $this->result($id,200,$id.'添加成功');
-            }else {
-                return $this->result($id,500,'添加失败');
-            }
+        return $order;
+    }
 
-        }else{
-            return $this->result(input('param.'),300,'数据不合法');
+    /**
+     * 表单数据后台验证方法
+     * @param $model 模板名
+     * @param $data 要做验证的数据列表
+     * @throws ApiException
+     */
+    public function saveValidate($model,$data){
+
+        $validate = validate($model);
+        if (!$validate->check($data)){
+            throw new ApiException('非法数据！',303);
+//            return apiResult(1,'非法数据！', '',303);
         }
     }
 
     /**
-     * 数据更新方法
-     * @return json 接口返回值，包括操作码和类型提示
+     * 将表单上传数据中的id和其他数据分离
+     * @param $data 表单提交数据
+     * @return mixed 分离后数据
      */
-    public function updateAjax(){
+    public function unsetOfId($data){
 
-        if (request()->isPost()){
+        $result['id'] = $data['id'];
 
-            $data = input('post.');
-
-            $id = $data['id'];
-
-            foreach ($data as $k => $v){
-                if ($k == 'id'){
-                    unset($data[$k]);
-                }
+        foreach ($data as $k => $v){
+            if ($k == 'id'){
+                unset($data[$k]);
             }
-
-            //获取调用方法当前控制器名
-            $model = $this->model ? $this->model : request()->controller();
-
-            try{
-                $reult = model($model)->save($data,['id' => $id]);
-            }catch (\Exception $e){
-                return $this->result($e->getMessage(),400,'数据库异常');
-            }
-
-            return $this->result($reult,200,'操作成功');
-
         }
 
-        return $this->result(input('post.'),300,'数据不合法');
+        $result['data'] = $data;
 
-    }
-
-    /**
-     * 数据列表获取方法
-     * @return string 列表数据json格式
-     */
-    public function listAjax(){
-
-        //整理筛选获取条件
-        $result = $this->splitData(input('post.'));
-
-        //获取调用方法当前控制器名
-        $model = $this->model ? $this->model : request()->controller();
-
-        //查询数据表
-        try{
-            $result = model($model)->getAll($result['limit'],$result['where'],$result['order']);
-        }catch (\Exception $e){
-            return $this->result($e,400,'数据库异常');
-        }
-
-        //数据转为json格式返给前端
-        return $this->result(json_encode($result),200,'数据获取成功');
-    }
-
-    /**
-     * 获取记录详情
-     * @param int $id 记录id
-     * @return string 列表数据json格式
-     */
-    public function infoAjax($id = 0){
-
-        if ($id){
-
-            //获取调用方法当前控制器名
-            $model = $this->model ? $this->model : request()->controller();
-
-            //按id查询记录详情
-            try {
-                $info = model($model)->get(['id' => $id]);
-            } catch (\Exception $e) {
-                return $this->result($e->getMessage(),400,'数据库异常');
-            }
-
-            //返回结果转为json格式
-            $info = json_encode($info);
-
-            //数据转为json格式返给前端
-            return $this->result($info,200,'数据获取成功');
-
-        }else{
-            return $this->result(input('param.'),300,'数据不合法');
-        }
-
+        return $result;
     }
 
     /**
@@ -169,7 +110,7 @@ class Base extends Controller{
         //循环扩展检索条件
         foreach ($data as $k => $v){
 
-            //将页数和每页条数先去掉
+            //将页数和每页条数以及参数值为空的先去掉
             if ($k == 'page' || $k == 'size' || empty($v)){
                 unset($data[$k]);
                 break;
@@ -200,10 +141,9 @@ class Base extends Controller{
                         $where[$condition] = $v;
                         break;
                     case 'order'://排序规则
-                        for ($i = 1; $i < count($arr) - 1; $i+=2){
-                            $order[] = [$arr[$i] => $arr[$i+1]];
-                        }
-                    default:
+                        $order[$arr[1]] = $v;
+                        break;
+                    default://其他标准类型如：eq,neq,egt,lt,elt
                         $where[$arr[1]] = [$arr[0], $v];
                         break;
                 }
@@ -219,28 +159,73 @@ class Base extends Controller{
     }
 
     /**
-     * 设置共有检索条件，可被覆盖
-     * @return mixed
+     * 数据操作方法，有id时为更新，没有id直接添加
+     * @return \think\response\Json 接口回掉信息
+     * @throws ApiException
      */
-    public function setWhere(){
+    public function saveAjax(){
 
-        //状态不为-1
-        $where['status'] = ['neq', -1];
+        //必须为post提交
+        if (!request()->isPost()){
+            throw new ApiException('没有权限',403);
+//            return apiResult(0,'没有权限', '',403);
+        }
 
-        return $where;
+        $data = input('post.');
+
+        if (empty($data['id'])){
+
+            //表单数据后台验证
+            $this->saveValidate($this->getModel(),$data);
+
+            //将提交表单信息插入表
+            $result = model($this->getModel())->add($data);
+        }else{
+            //将表单上传数据中的id和其他数据分离
+            $param = $this->unsetOfId($data);
+
+            //更新表中数据
+            $result = model($this->getModel())->saveOfUpdate($param);
+        }
+
+        //数据转为json格式返给前端
+        return json($result,200);
+
     }
 
     /**
-     * 设置默认排序规则，不可被覆盖
-     * @return array
+     * 数据列表获取方法
+     * @return string 列表数据json格式
      */
-    public function setOrder(){
+    public function listAjax(){
 
-        //按id倒叙
-        $order[] = ['id' => 'desc'];
+        //整理筛选获取条件
+        $param = $this->splitData(input('post.'));
 
-        return $order;
+        //查询数据表
+        $result = model($this->getModel())->getAll($param['limit'], $param['where'], $param['order']);
 
+        //数据转为json格式返给前端
+        return json($result,200);
+    }
+
+    /**
+     * 获取记录详情
+     * @param int $id 记录id
+     * @return string 列表数据json格式
+     */
+    public function infoAjax($id = 0){
+
+        //提交数据必须有id
+        if (!$id){
+            throw new ApiException('数据不合法！',303);
+        }
+
+        //获取记录详情数据
+        $result = model($this->getModel())->get(['id' => $id]);
+
+        //数据转为json格式返给前端
+        return json($result,200);
     }
 
 }

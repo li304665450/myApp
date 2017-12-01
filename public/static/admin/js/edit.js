@@ -5,13 +5,11 @@ function info_display(id,url) {
         type: "POST",
         url: url,
         data: {
-            id: getUrlParam('id')
+            id: id
         }
     }).done(function (relult) {
-        console.log(relult);
-        var obj = JSON.parse(relult.data);
-        console.log(obj);
-        $.each(obj,function(index,value){
+        // console.log(relult);
+        $.each(relult,function(index,value){
             $('#'+index).val(value);
             $('#'+index+'_select').find("option[value="+value+"]").attr("selected",true);
             $('#image_src').attr('height','400');

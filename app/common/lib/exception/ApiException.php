@@ -19,9 +19,12 @@ use Throwable;
  */
 class ApiException extends Exception {
 
-    public  $message = '';
-    public $httpCode = 500;
-    public $code = 0;
+    //提示信息
+    public  $message;
+    //http状态码
+    public $httpCode;
+    //系统状态码
+    public $code;
 
     public function __construct($message = "", $httpCode = 500, $code = 0)
     {
