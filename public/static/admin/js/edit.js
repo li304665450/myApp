@@ -20,7 +20,6 @@ function info_display(id,url) {
         })
     })
 }
-console.log(save_url);
 
 //checkbox样式加载
 $('.skin-minimal input').iCheck({
