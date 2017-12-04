@@ -9,18 +9,18 @@
 namespace app\api\controller;
 
 
+use app\common\controller\BaseController;
 use app\common\lib\exception\ApiException;
 use app\common\lib\IAuth;
 use app\common\lib\Time;
 use think\Cache;
-use think\Controller;
 
 /**
- * api请求基类
+ * api请求基础控制器
  * Class Base
  * @package app\api\controller
  */
-class Base extends Controller{
+class Base extends BaseController {
 
     /**
      * @var string header头信息
