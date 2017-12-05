@@ -21,6 +21,15 @@ class AdminDictionary extends Base{
      * @return mixed
      */
     public function index(){
+
+        //获取模板名称
+        $model = $this->getModel();
+
+        //栏目列表
+        $list = model($model)->getAll(['type' => 0]);
+
+        $this->assign('list',$list['data']);
+
         return $this->fetch();
     }
 

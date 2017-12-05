@@ -50,15 +50,34 @@ class BaseModel extends Model
         return result(1, '更新成功！','');
     }
 
+    /** 获取全部数据列表，不分页
+     * @param $where 检索条件，可选
+     * @param $order 排序规则，可选
+     * @return array list数据列表
+     * @throws ApiException
+     */
+    public function getAll($where = [],$order = []){
+
+        try{
+            $result = empty($where) ? $this : $this->where($where);
+            $result = empty($order) ? $result : $result->order($order);
+            $result = $result->select();
+        }catch (\Exception $e){
+            throw new ApiException('数据库异常！');
+        }
+
+        return result(1, '成功！', $result);
+    }
+
     /**
-     * 数据列表主查询方法，支持检索
+     * 数据列表主查询方法，支持检索,分页，排序
      * @param array $limt 分页要求
      * @param array $where 检索条件
      * @param array $order 排序方式
      * @return array list数据列表 count结果条数 pageTotal总页数
      * @throws ApiException
      */
-    public function getAll($limit = [],$where = [],$order = []){
+    public function getList($limit = [],$where = [],$order = []){
 
         //查询开始点
         $start = ($limit['page'] - 1) * $limit['size'];
@@ -73,6 +92,7 @@ class BaseModel extends Model
             throw new ApiException('数据库异常！');
         }
 
+        $result['sql'] = $this->getLastSql();
 
         //未分页的记录总条数
         $result['count'] = $this->where($where)

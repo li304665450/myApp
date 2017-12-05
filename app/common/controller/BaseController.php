@@ -28,6 +28,75 @@ class BaseController extends Controller {
     }
 
     /**
+     * 数据操作方法，有id时为更新，没有id直接添加
+     * @return \think\response\Json 接口回掉信息
+     * @throws ApiException
+     */
+    public function saveAjax(){
+
+        //必须为post提交
+        if (!request()->isPost()){
+            throw new ApiException('没有权限',403);
+        }
+
+        $data = input('post.');
+
+        if (empty($data['id'])){
+
+            //表单数据后台验证
+            $this->saveValidate($this->getModel(),$data);
+
+            //将提交表单信息插入表
+            $result = model($this->getModel())->add($data);
+        }else{
+            //将表单上传数据中的id和其他数据分离
+            $param = $this->unsetOfId($data);
+
+            //更新表中数据
+            $result = model($this->getModel())->saveOfUpdate($param);
+        }
+
+        //数据转为json格式返给前端
+        return json($result,200);
+
+    }
+
+    /**
+     * 数据列表获取方法
+     * @return string 列表数据json格式
+     */
+    public function listAjax(){
+
+        //整理筛选获取条件
+        $param = $this->splitData(input('post.'));
+
+        //查询数据表
+        $result = model($this->getModel())->getlist($param['limit'], $param['where'], $param['order']);
+
+        //数据转为json格式返给前端
+        return json($result,200);
+    }
+
+    /**
+     * 获取记录详情
+     * @param int $id 记录id
+     * @return string 列表数据json格式
+     */
+    public function infoAjax($id = 0){
+
+        //提交数据必须有id
+        if (!$id){
+            throw new ApiException('数据不合法！',303);
+        }
+
+        //获取记录详情数据
+        $result = model($this->getModel())->getInfor($id);
+
+        //数据转为json格式返给前端
+        return json($result,200);
+    }
+
+    /**
      * 设置共有检索条件，设置条件可被覆盖
      * @return mixed
      */
@@ -148,75 +217,6 @@ class BaseController extends Controller {
 
         return $result;
 
-    }
-
-    /**
-     * 数据操作方法，有id时为更新，没有id直接添加
-     * @return \think\response\Json 接口回掉信息
-     * @throws ApiException
-     */
-    public function saveAjax(){
-
-        //必须为post提交
-        if (!request()->isPost()){
-            throw new ApiException('没有权限',403);
-        }
-
-        $data = input('post.');
-
-        if (empty($data['id'])){
-
-            //表单数据后台验证
-            $this->saveValidate($this->getModel(),$data);
-
-            //将提交表单信息插入表
-            $result = model($this->getModel())->add($data);
-        }else{
-            //将表单上传数据中的id和其他数据分离
-            $param = $this->unsetOfId($data);
-
-            //更新表中数据
-            $result = model($this->getModel())->saveOfUpdate($param);
-        }
-
-        //数据转为json格式返给前端
-        return json($result,200);
-
-    }
-
-    /**
-     * 数据列表获取方法
-     * @return string 列表数据json格式
-     */
-    public function listAjax(){
-
-        //整理筛选获取条件
-        $param = $this->splitData(input('post.'));
-
-        //查询数据表
-        $result = model($this->getModel())->getAll($param['limit'], $param['where'], $param['order']);
-
-        //数据转为json格式返给前端
-        return json($result,200);
-    }
-
-    /**
-     * 获取记录详情
-     * @param int $id 记录id
-     * @return string 列表数据json格式
-     */
-    public function infoAjax($id = 0){
-
-        //提交数据必须有id
-        if (!$id){
-            throw new ApiException('数据不合法！',303);
-        }
-
-        //获取记录详情数据
-        $result = model($this->getModel())->getInfor($id);
-
-        //数据转为json格式返给前端
-        return json($result,200);
     }
 
 }
