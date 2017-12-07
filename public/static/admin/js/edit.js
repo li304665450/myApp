@@ -9,7 +9,7 @@ function info_display(id,url) {
         }
     }).done(function (relult) {
         console.log(relult);
-        $.each(relult.data,function(index,value){
+        $.each(relult.data.info,function(index,value){
             $('#'+index).val(value);
             $('#'+index+'_select').find("option[value="+value+"]").attr("selected",true);
             $('#image_src').attr('height','400');

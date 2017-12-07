@@ -25,10 +25,14 @@ class AdminDictionary extends Base{
         //获取模板名称
         $model = $this->getModel();
 
-        //栏目列表
-        $list = model($model)->getAll(['type' => 0]);
+        $where = $this->setWhere();
 
-        $this->assign('list',$list['data']);
+        $where['type'] = 0;
+
+        //栏目列表
+        $list = model($model)->getAll($where);
+
+        $this->assign('list',$list['data']['list']);
 
         return $this->fetch();
     }
@@ -38,6 +42,14 @@ class AdminDictionary extends Base{
      * @return mixed
      */
     public function lists(){
+        return $this->fetch();
+    }
+
+    /**
+     * 详情页，添加/修改
+     * @return mixed
+     */
+    public function edit(){
         return $this->fetch();
     }
 

@@ -1,0 +1,144 @@
+<!--_meta页面公共开头-->
+{include file="public/_meta" /}
+
+<link href="__STATIC__/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+<link href="__STATIC__/admin/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+
+<div class="page-container">
+	<form class="form form-horizontal" id="form-news-add">
+		<input type="hidden" name="id" id="id" value=""/>
+		<input type="hidden" name="id" id="pid" value=""/>
+		<input type="hidden" name="status" id="status" value="1"/>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>字典名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input  class="input-text" value="" placeholder="" id="name" name="name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">字典值：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input  class="input-text" value="" placeholder="" id="value" name="value">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">备注：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input  class="input-text" value="" placeholder="" id="remark" name="remark">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">对应表名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input  class="input-text" value="" placeholder="" id="table" name="table">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">对应字段：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input  class="input-text" value="" placeholder="" id="field" name="field">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>类型：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+					<select name="type" id="type_select" class="select">
+						<option value="0">栏目</option>
+						<option value="1">字典</option>
+					</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">排序值：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input  class="input-text" value="" placeholder="0" id="listorder" name="listorder">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button id="sub_btn" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe632;</i> 保存并提交审核</button>
+				<button id="draft_btn" class="btn btn-secondary radius" type="button"><i class="Hui-iconfont">&#xe632;</i> 保存草稿</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<!--_footer 作为公共模版分离出去-->
+{include file="public/_footer" /}
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/webuploader/0.1.5/webuploader.min.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/uploadify/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/js/edit.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/js/image.js"></script>
+<script type="text/javascript">
+    $(function(){
+
+        //数据加载方法
+        if(getUrlParam('id')){
+            info_display(getUrlParam('id'),'{:url("infoAjax")}');
+        }
+
+        //验证及提交操作
+        $("#form-news-add").validate({
+            rules:{
+                title:{
+                    required:true,
+                    minlength:2,
+                    maxlength:20
+                },
+                small_title:{
+                    required:true,
+                },
+                catid:{
+                    required:true,
+                },
+                listorder:{
+                    required:true,
+                    number:1
+                },
+                source_type:{
+                    required:true,
+                },
+                description:{
+                    required:true,
+                },
+                content:{
+                    required:true,
+                    minlength:2,
+                    maxlength:200
+                }
+            },
+            onkeyup:false,
+            focusCleanup:true,
+            success:"valid",
+            submitHandler:function(form){
+                $(form).ajaxSubmit({
+                    type: 'post',
+                    url:  "{:url('saveAjax')}",
+                    success: function(data){
+                        console.log(data);
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        var t = setTimeout('window.location.reload()',1000);
+                    },
+                    error: function(XmlHttpRequest, textStatus, errorThrown){
+                        layer.msg('页面错误',{icon:1,time:1000});
+                    }
+                });
+//                var index = parent.layer.getFrameIndex(window.name);
+//                parent.$('.btn-refresh').click();
+//                parent.layer.close(index);
+            }
+        });
+    });
+</script>
+</body>
+</html>

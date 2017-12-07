@@ -52,7 +52,7 @@ function picture_shenhe(obj,id){
         });
 }
 
-/*图片-下架*/
+/*下架*/
 function picture_stop(obj,id){
     layer.confirm('确认要下架吗？',function(index){
         $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
@@ -63,7 +63,7 @@ function picture_stop(obj,id){
     });
 }
 
-/*图片-发布*/
+/*发布*/
 function picture_start(obj,id){
     layer.confirm('确认要发布吗？',function(index){
         $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
@@ -81,6 +81,7 @@ function picture_shenqing(obj,id){
     layer.msg('已提交申请，耐心等待审核!', {icon: 1,time:2000});
 }
 
+/* 状态改变*/
 function statusSave(id, status) {
     $.ajax({
         type : "POST",

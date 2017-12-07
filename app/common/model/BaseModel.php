@@ -30,7 +30,9 @@ class BaseModel extends Model
             throw new ApiException('数据库异常！');
         }
 
-        return result(1, '添加成功！', $this->id);
+        $result['id'] = $this->id;
+
+        return result(1, '添加成功！', $this->returnSql($result));
     }
 
     /**
@@ -39,15 +41,15 @@ class BaseModel extends Model
      * @return array 回调数组
      * @throws ApiException
      */
-    public function saveOfUpdate($data)
-    {
+    public function saveOfUpdate($data){
+
         try{
-            $reult = $this->save($data['data'],['id' => $data['id']]);
+            $result['data'] = $this->save($data['data'],['id' => $data['id']]);
         }catch (\Exception $e){
             throw new ApiException('数据库异常！');
         }
 
-        return result(1, '更新成功！','');
+        return result(1, '更新成功！',$this->returnSql($result));
     }
 
     /** 获取全部数据列表，不分页
@@ -59,14 +61,14 @@ class BaseModel extends Model
     public function getAll($where = [],$order = []){
 
         try{
-            $result = empty($where) ? $this : $this->where($where);
-            $result = empty($order) ? $result : $result->order($order);
-            $result = $result->select();
+            $data = empty($where) ? $this : $this->where($where);
+            $data = empty($order) ? $data : $data->order($order);
+            $result['list'] = $data->select();
         }catch (\Exception $e){
             throw new ApiException('数据库异常！');
         }
 
-        return result(1, '成功！', $result);
+        return result(1, '成功！', $this->returnSql($result));
     }
 
     /**
@@ -82,6 +84,9 @@ class BaseModel extends Model
         //查询开始点
         $start = ($limit['page'] - 1) * $limit['size'];
 
+        //未分页的记录总条数
+        $result['count'] = $this->where($where)->count();
+
         //符合条件的分页数据列表
         try{
             $result['list'] = $this->where($where)
@@ -92,19 +97,13 @@ class BaseModel extends Model
             throw new ApiException('数据库异常！');
         }
 
-        $result['sql'] = $this->getLastSql();
-
-        //未分页的记录总条数
-        $result['count'] = $this->where($where)
-            ->count();
-
         //分页的总页数
         $result['pageTotal'] = ceil($result['count']/$limit['size']);
 
         //当前页数
         $result['curr'] = $limit['page'];
 
-        return result(1, '成功！', $result);
+        return result(1, '成功！', $this->returnSql($result));
 
     }
 
@@ -117,12 +116,27 @@ class BaseModel extends Model
     public function getInfor($id){
 
         try {
-            $result = $this->get(['id' => $id]);
+            $result['info'] = $this->get(['id' => $id]);
         } catch (\Exception $e) {
             throw new ApiException('数据库异常！');
         }
 
-        return result(1, '成功！', $result);
+        return result(1, '成功！', $this->returnSql($result));
+    }
+
+    /**
+     * 输出数据补加sql语句
+     * @param $result
+     * @return mixed
+     */
+    public function returnSql($result){
+
+        //开启调试模式，输出数据带SQL语句
+        if (config('app_debug')){
+            $result['sql'] = $this->getLastSql();
+        }
+        return $result;
+
     }
 
 }
