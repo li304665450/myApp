@@ -23,7 +23,7 @@
 		<table class="table table-border table-bordered table-bg table-hover table-sort">
 			<thead>
 				<tr class="text-c">
-					<th width="40"><input name="" type="checkbox" value=""></th>
+					<th width="40"><input id="allCheck" type="checkbox"></th>
 					<th width="80">ID</th>
 					<th width="100">标题</th>
 					<th width="100">短标题</th>
@@ -96,7 +96,7 @@ function loading(page, size) {
         });
         $.each(obj.list,function(index,value){
             content += "<tr class=\'text-c\'>";
-            content += "					<td><input name=\'\' type=\'checkbox\' value=\'\'></td>";
+            content += "					<td><input name=\'\' type=\'checkbox\' value=\'"+value.id+"\'></td>";
             content += "					<td>"+value.id+"</td>";
             content += "					<td>"+value.title+"</td>";
             content += "					<td>"+value.small_title+"</td>";
