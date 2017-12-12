@@ -23,12 +23,12 @@ function del(obj,id){
 
 /* 批量删除*/
 function datadel() {
-    var chks = $("input:checked");//获取所有选中的checkbox,chks是一个元素数组
-    var len = $('#allCheck').is(':checked') ? chks.length-1 : chks.length;//选中的checkbox数量
+    var chks = $('#allCheck').is(':checked') ? $("input:checked").splice(1,5) : $("input:checked");//获取所有选中的checkbox,chks是一个元素数组
+    $('#allCheck').prop("checked",false);
 
-    layer.confirm('确认要删除这'+len+'条数据吗？',function(index){
+    layer.confirm('确认要删除这'+chks.length+'条数据吗？',function(index){
         $.each(chks, function (index, value) {
-            //value.parents("tr").remove();
+            $(value).parents("tr").remove();
             statusSave(value.value, -1);
         })
         layer.msg('已删除', {icon:1,time:1000});
