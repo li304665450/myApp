@@ -70,7 +70,7 @@ function picture_shenhe(obj,id){
 function picture_stop(obj,id){
     layer.confirm('确认要下架吗？',function(index){
         $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
-        $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
+        $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">下架</span>');
         $(obj).remove();
         statusSave(id,0);
         layer.msg('已下架',{icon: 5,time:1000});
@@ -79,12 +79,12 @@ function picture_stop(obj,id){
 
 /*发布*/
 function picture_start(obj,id){
-    layer.confirm('确认要发布吗？',function(index){
+    layer.confirm('确认要启用吗？',function(index){
         $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="picture_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
-        $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
+        $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">启用</span>');
         $(obj).remove();
         statusSave(id,1);
-        layer.msg('已发布',{icon: 6,time:1000});
+        layer.msg('已启用',{icon: 6,time:1000});
     });
 }
 

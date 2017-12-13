@@ -16,6 +16,41 @@ class BaseModel extends Model
     //开启自动添入时间
     protected $autoWriteTimestamp = 'datetime';
 
+    //数据字典存储变量
+    protected $dictionary;
+
+    /**
+     * 自定义初始化方法
+     */
+    public function initialize()
+    {
+        parent::initialize();
+        //调用的不是数据字典模块，初始化数据字典变量
+        if ($this->name != 'AdminDictionary'){
+            $this->setDictionary();
+        }
+    }
+
+    /**
+     * 给数据字典存储变量赋值
+     */
+    public function setDictionary(){
+        //获取表名字典
+        $table = \model('AdminDictionary')->get(['table' => $this->name]);
+        //获取字段名字典
+        $field = \model('AdminDictionary')->getAll(['pid' => $table['id']]);
+        foreach ($field['data']['list'] as $k=>$v){
+            //获取字典内容
+            $dic = \model('AdminDictionary')->getAll(['pid' => $v['id']]);
+            //组装获取器数据格式
+            foreach ($dic['data']['list'] as $key => $value){
+                $dic_content[$v['field']][$value['value']] = $value['name'];
+            }
+        }
+        //将组装好的数据
+        $this->dictionary = empty($dic_content) ? "" : $dic_content;
+    }
+
     /**
      * 数据表添加记录
      * @param $data 添加数据数组

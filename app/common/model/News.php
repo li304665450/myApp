@@ -12,4 +12,15 @@ namespace app\common\model;
 class News extends BaseModel
 {
 
+    /**
+     * 状态获取器
+     * @param $value
+     * @return mixed
+     */
+    public function getStatusAttr($value)
+    {
+        $status = $this->dictionary['status'];
+        return $status[$value];
+    }
+
 }

@@ -89,4 +89,16 @@ class Login extends Controller{
         $this->redirect('login');
     }
 
+    /**
+     * 手动登陆后台
+     * @return string
+     */
+    public function loginHead(){
+        //设置session信息
+        session('adminuser', 'api', 'myApp_admin');
+
+        //登陆成功，跳转页面
+        return '登陆成功';
+    }
+
 }

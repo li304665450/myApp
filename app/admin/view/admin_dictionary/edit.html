@@ -16,7 +16,7 @@
 				<input  class="input-text" value="" placeholder="" id="name" name="name">
 			</div>
 		</div>
-		<div class="row cl">
+		<div class="row cl" id="value_label" style="display: none">
 			<label class="form-label col-xs-4 col-sm-2">字典值：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input  class="input-text" value="" placeholder="" id="value" name="value">
@@ -83,6 +83,7 @@
 			$('#field_lable').css('display','block');
 		}else if(getUrlParam('type') == 1){
 			$('#type').val(2);
+            $('#value_label').css('display','block');
 		}else {
 			$('#table_label').css('display','block');
 		}

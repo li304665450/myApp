@@ -17,6 +17,19 @@ namespace app\admin\controller;
 class AdminDictionary extends Base{
 
     /**
+     * 复写排序设置方法
+     * 设置本控制器默认排序方式
+     * @return array
+     */
+    public function setOrder()
+    {
+        //按排序字段升序
+        $order = ['listorder' => 'asc'];
+
+        return $order;
+    }
+
+    /**
      * 主页，主要做ztree
      * @return mixed
      */

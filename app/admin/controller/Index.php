@@ -24,18 +24,8 @@ class Index extends Base
      * @return mixed
      */
      public function welcome(){
-         $user = model('User');
-         $where['status'] = ['neq', -1];
-//         $order = ['id' => 'desc', 'update_time' => 'asc'];
-         $order = ['id' => 'desc'];
-         $order['update_time'] = 'asc';
-         $arr = ['a','b','b','d','e','f'];
-//         array_push($order, ['update_time' => 'asc']);
-//         $order[] = ['update_time' => 'asc'];
-//         halt($order);
-//         print_r($order);;exit();
-         $user->where($where)->order($order)->select();
-         return $user->getLastSql();
+
+         return model('News')->get(1);
      }
 
 }
