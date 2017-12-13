@@ -7,8 +7,9 @@
 <div class="page-container">
 	<form class="form form-horizontal" id="form-news-add">
 		<input type="hidden" name="id" id="id" value=""/>
-		<input type="hidden" name="id" id="pid" value=""/>
+		<input type="hidden" name="pid" id="pid" value="0"/>
 		<input type="hidden" name="status" id="status" value="1"/>
+		<input type="hidden" name="type" id="type" value="0"/>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>字典名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
@@ -27,27 +28,16 @@
 				<input  class="input-text" value="" placeholder="" id="remark" name="remark">
 			</div>
 		</div>
-		<div class="row cl">
+		<div class="row cl" id="table_label" style="display: none">
 			<label class="form-label col-xs-4 col-sm-2">对应表名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input  class="input-text" value="" placeholder="" id="table" name="table">
 			</div>
 		</div>
-		<div class="row cl">
+		<div class="row cl" id="field_lable" style="display: none">
 			<label class="form-label col-xs-4 col-sm-2">对应字段：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input  class="input-text" value="" placeholder="" id="field" name="field">
-			</div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>类型：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<span class="select-box">
-					<select name="type" id="type_select" class="select">
-						<option value="0">栏目</option>
-						<option value="1">字典</option>
-					</select>
-				</span>
 			</div>
 		</div>
 		<div class="row cl">
@@ -86,6 +76,25 @@
         if(getUrlParam('id')){
             info_display(getUrlParam('id'),'{:url("infoAjax")}');
         }
+
+		//设置字段类型：栏目或字典内容
+		if(getUrlParam('type') == 0){
+			$('#type').val(1);
+			$('#field_lable').css('display','block');
+		}else if(getUrlParam('type') == 1){
+			$('#type').val(2);
+		}else {
+			$('#table_label').css('display','block');
+		}
+		//设置pid
+		if(getUrlParam('pid')){
+			$('#pid').val(getUrlParam('pid'));
+		}
+
+
+
+
+
 
         //验证及提交操作
         $("#form-news-add").validate({
@@ -127,7 +136,7 @@
                     success: function(data){
                         console.log(data);
                         layer.msg(data.msg,{icon:1,time:1000});
-                        var t = setTimeout('window.location.reload()',1000);
+                        var t = setTimeout('window.history.go(1)',1000);
                     },
                     error: function(XmlHttpRequest, textStatus, errorThrown){
                         layer.msg('页面错误',{icon:1,time:1000});

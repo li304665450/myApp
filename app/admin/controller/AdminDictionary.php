@@ -22,15 +22,13 @@ class AdminDictionary extends Base{
      */
     public function index(){
 
-        //获取模板名称
-        $model = $this->getModel();
-
         $where = $this->setWhere();
 
-        $where['type'] = 0;
+        //取栏目类型
+        $where['type'] = ['lt', 2];
 
         //栏目列表
-        $list = model($model)->getAll($where);
+        $list = model($this->getModel())->getAll($where);
 
         $this->assign('list',$list['data']['list']);
 

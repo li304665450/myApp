@@ -9,6 +9,7 @@
 namespace app\common\controller;
 
 
+use app\common\lib\exception\ApiException;
 use think\Controller;
 
 class BaseController extends Controller {
@@ -44,7 +45,7 @@ class BaseController extends Controller {
         if (empty($data['id'])){
 
             //表单数据后台验证
-            $this->saveValidate($this->getModel(),$data);
+            //$this->saveValidate($this->getModel(),$data);
 
             //将提交表单信息插入表
             $result = model($this->getModel())->add($data);

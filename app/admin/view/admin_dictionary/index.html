@@ -42,7 +42,7 @@
         callback: {
             beforeClick: function(treeId, treeNode) {
                 var zTree = $.fn.zTree.getZTreeObj("tree");
-                demoIframe.attr("src",url+'?pid='+treeNode.id);
+                demoIframe.attr("src",url+'?pid='+treeNode.id+'&type='+treeNode.type);
                 return true;
 //                if (treeNode.isParent) {
 //                    zTree.expandNode(treeNode);
@@ -63,7 +63,7 @@
             {
         {/literal}
 
-        id:{$vo.id}, pId:{$vo.pid}, name:"{$vo.name}"
+        id:{$vo.id}, pId:{$vo.pid}, name:"{$vo.name}",type:"{$vo.type}"
 
         {literal}
         },
