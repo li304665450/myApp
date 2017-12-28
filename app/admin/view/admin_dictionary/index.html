@@ -55,32 +55,19 @@
         }
     };
 
-    var zNodes =[
-        { id:1, name:"数据字典", open:true},
-        {volist name="list" id="vo"}
+    zNodes =[];
 
-        {literal}
-            {
-        {/literal}
+    $.ajax({
+        url : "{:url('getMenuAjax')}",
+        async : false
+    }).done(function(result){
+        console.log(result.data.list);
+        zNodes.push({ id:1, name:"数据字典", open:true});
+        $.each(result.data.list,function(index,value){
+            zNodes.push({ id:value.id, pId:value.pid, name:value.name});
+        })
 
-        id:{$vo.id}, pId:{$vo.pid}, name:"{$vo.name}",type:"{$vo.type}"
-
-        {literal}
-        },
-        {/literal}
-
-        {/volist}
-//        { id:1, pId:0, name:"一级分类", open:true},
-//        { id:11, pId:1, name:"二级分类"},
-//        { id:111, pId:11, name:"测试"},
-//        { id:112, pId:11, name:"三级分类"},
-//        { id:113, pId:11, name:"三级分类"},
-//        { id:114, pId:11, name:"三级分类"},
-//        { id:115, pId:11, name:"三级分类"},
-//        { id:12, pId:1, name:"二级分类 1-2"},
-//        { id:121, pId:12, name:"三级分类 1-2-1"},
-//        { id:122, pId:12, name:"三级分类 1-2-2"},
-    ];
+    })
 
     var code;
 

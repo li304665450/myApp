@@ -34,17 +34,6 @@ class AdminDictionary extends Base{
      * @return mixed
      */
     public function index(){
-
-        $where = $this->setWhere();
-
-        //取栏目类型
-        $where['type'] = ['lt', 2];
-
-        //栏目列表
-        $list = model($this->getModel())->getAll($where);
-
-        $this->assign('list',$list['data']['list']);
-
         return $this->fetch();
     }
 
@@ -62,6 +51,23 @@ class AdminDictionary extends Base{
      */
     public function edit(){
         return $this->fetch();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMenuAjax(){
+
+        $order = $this->setOrder();
+
+        $where = $this->setWhere();
+
+        //取栏目类型
+        $where['type'] = ['lt', 2];
+
+        //栏目列表
+        return model($this->getModel())->getAll($where,$order);
+
     }
 
 }
