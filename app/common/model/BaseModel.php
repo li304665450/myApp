@@ -35,10 +35,12 @@ class BaseModel extends Model
      * 给数据字典存储变量赋值
      */
     public function setDictionary(){
+
         //获取表名字典
         $table = \model('AdminDictionary')->get(['table' => $this->name]);
         //获取字段名字典
         $field = \model('AdminDictionary')->getAll(['pid' => $table['id']]);
+
         foreach ($field['data']['list'] as $k=>$v){
             //获取字典内容
             $dic = \model('AdminDictionary')->getAll(['pid' => $v['id']]);

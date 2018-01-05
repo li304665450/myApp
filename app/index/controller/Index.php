@@ -9,6 +9,7 @@ class Index
     }
 
     public function home(){
-        return 'home';
+
+        return  model('Menu')->getAll();
     }
 }
