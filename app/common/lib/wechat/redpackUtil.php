@@ -15,7 +15,7 @@ header("Content-type: text/html; charset=utf-8");
  * Class redPaperUtil
  * @package app\common\lib\wechat
  */
-class redpackUtil{
+class RedpackUtil{
 
     private $mch_id;
     private $appid;
@@ -41,6 +41,14 @@ class redpackUtil{
             self::$_instance = new self ();
         }
         return self::$_instance;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppid()
+    {
+        return $this->appid;
     }
 
     /**

@@ -5,12 +5,13 @@
  * Date: 2018/1/5
  * Time: 16:12
  */
+namespace app\common\lib\wechat;
 
 /**
  * 微信基础接口工具类
  * Class wexinUtil
  */
-class wexinUtil{
+class WexinUtil{
 
     private $appid;
     private $appsecret;
@@ -22,6 +23,14 @@ class wexinUtil{
     {
         $this->appid = config('wechat.appid');
         $this->appsecret = config('wechat.appsecret');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppsecret()
+    {
+        return $this->appsecret;
     }
 
     //静态方法，单例统一访问入口
