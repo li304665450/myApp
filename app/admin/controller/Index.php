@@ -15,7 +15,8 @@ class Index extends Base
      * 后台入口
      * @return mixed
      */
-    public function index(){
+    public function index()
+    {
        return $this->fetch();
     }
 
@@ -23,9 +24,17 @@ class Index extends Base
      * 登陆初始页面
      * @return mixed
      */
-     public function welcome(){
+     public function welcome()
+     {
 
-         return model('News')->get(1);
+         return model('News')->getAll();
+
+
+         //取栏目类型
+//         $where['type'] = ['lt', 2];
+
+         //栏目列表
+//         return model('AdminDictionary')->getAll($where);
      }
 
 }

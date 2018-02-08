@@ -14,7 +14,8 @@ namespace app\admin\controller;
  * Class AdminDictionary
  * @package app\admin\controller
  */
-class AdminDictionary extends Base{
+class AdminDictionary extends Base
+{
 
     /**
      * 复写排序设置方法
@@ -33,7 +34,8 @@ class AdminDictionary extends Base{
      * 主页，主要做ztree
      * @return mixed
      */
-    public function index(){
+    public function index()
+    {
         return $this->fetch();
     }
 
@@ -41,7 +43,8 @@ class AdminDictionary extends Base{
      * 数据列表页
      * @return mixed
      */
-    public function lists(){
+    public function lists()
+    {
         return $this->fetch();
     }
 
@@ -49,14 +52,16 @@ class AdminDictionary extends Base{
      * 详情页，添加/修改
      * @return mixed
      */
-    public function edit(){
+    public function edit()
+    {
         return $this->fetch();
     }
 
     /**
      * @return mixed
      */
-    public function getMenuAjax(){
+    public function getMenuAjax()
+    {
 
         $order = $this->setOrder();
 
@@ -69,5 +74,6 @@ class AdminDictionary extends Base{
         return model($this->getModel())->getAll($where,$order);
 
     }
+
 
 }

@@ -61,7 +61,7 @@
         url : "{:url('getMenuAjax')}",
         async : false
     }).done(function(result){
-        console.log(result.data.list);
+        console.log(result);
         zNodes.push({ id:1, name:"数据字典", open:true});
         $.each(result.data.list,function(index,value){
             zNodes.push({ id:value.id, pId:value.pid, name:value.name});

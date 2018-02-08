@@ -15,20 +15,23 @@ use app\common\lib\IAuth;
  * Class Admin
  * @package app\admin\controller
  */
-class Admin extends Base{
+class Admin extends Base
+{
 
     /**
      * 添加管理员页面
      * @return mixed
      */
-    public function add(){
+    public function add()
+    {
         return $this->fetch();
     }
 
     /**
      * 管理员添加操作方法
      */
-    public function adminAddAjax(){
+    public function adminAddAjax()
+    {
 
         //判断是否为post提交
         if (request()->isPost()){
