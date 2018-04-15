@@ -5,23 +5,23 @@
  * Date: 2017/10/19
  * Time: 15:43
  */
-//echo md5("123456_#string_try");
 
-$arr = [
-    'order',
-    'id',
-    'desc',
-    'price',
-    'asc'
-];
 
-for ($i = 1; $i < count($arr); $i+=2){
-    $order[] = [$arr[$i] => $arr[$i+1]];
+class Application{
+    public static function main(){
+        self::registe();
+    }
+    public static function registe(){
+        spl_autoload_register("Application::loadClass");
+    }
+    public static function loadClass($class){
+        $class=str_replace('\\', '/', $class);
+        $class="./".$class.".php";
+//        require_once $class;
+        var_dump($class);
+    }
 }
-
-$order[] = ['nice' => 'desc'];
-
-var_dump($order);
+Application::main();
 
 //$i = 1;
 //$i +=2;

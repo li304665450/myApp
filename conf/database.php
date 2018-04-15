@@ -13,13 +13,13 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => 'my3806063.xincache1.cn',
+    'hostname'        => 'localhost',
     // 数据库名
-    'database'        => 'my3806063',
+    'database'        => 'app',
     // 用户名
-    'username'        => 'my3806063',
+    'username'        => 'root',
     // 密码
-    'password'        => 'li8369945',
+    'password'        => '123456',
     // 端口
     'hostport'        => '3306',
     // 连接dsn

@@ -1,6 +1,9 @@
 <?php
 namespace app\index\controller;
 
+use app\common\lib\wechat\RedpackUtil;
+use app\common\lib\wechat\WexinUtil;
+
 class Index
 {
     public function index()
@@ -9,7 +12,9 @@ class Index
     }
 
     public function home(){
-
-        return  model('Menu')->getAll();
+        return '111';
+//        return  model('News')->getAll();
+//        return RedpackUtil::getInstance()->getAppid();
+//        return WexinUtil::getInstance()->getAppsecret();
     }
 }
