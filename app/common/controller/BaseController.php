@@ -79,9 +79,9 @@ class BaseController extends Controller {
     }
 
     /**
-     * 获取记录详情
      * @param int $id 记录id
-     * @return string 列表数据json格式
+     * @return \think\response\Json
+     * @throws ApiException
      */
     public function infoAjax($id = 0){
 
@@ -123,8 +123,8 @@ class BaseController extends Controller {
 
     /**
      * 表单数据后台验证方法
-     * @param $model 模板名
-     * @param $data 要做验证的数据列表
+     * @param string $model 模板名
+     * @param array $data 要做验证的数据列表
      * @throws ApiException
      */
     public function saveValidate($model,$data){
@@ -137,7 +137,7 @@ class BaseController extends Controller {
 
     /**
      * 将表单上传数据中的id和其他数据分离
-     * @param $data 表单提交数据
+     * @param array $data 表单提交数据
      * @return mixed 分离后数据
      */
     public function unsetOfId($data){
