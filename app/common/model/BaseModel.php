@@ -55,7 +55,7 @@ class BaseModel extends Model
 
     /**
      * 数据表添加记录
-     * @param $data 添加数据数组
+     * @param array $data 添加数据数组
      * @return array 回调数组包含添加后的记录id
      * @throws ApiException
      */
@@ -74,7 +74,7 @@ class BaseModel extends Model
 
     /**
      * 更新数据
-     * @param $data 要更新的数据
+     * @param array $data 要更新的数据
      * @return array 回调数组
      * @throws ApiException
      */
@@ -90,8 +90,8 @@ class BaseModel extends Model
     }
 
     /** 获取全部数据列表，不分页
-     * @param $where 检索条件，可选
-     * @param $order 排序规则，可选
+     * @param  array $where 检索条件，可选
+     * @param array $order 排序规则，可选
      * @return array list数据列表
      * @throws ApiException
      */
@@ -110,7 +110,7 @@ class BaseModel extends Model
 
     /**
      * 数据列表主查询方法，支持检索,分页，排序
-     * @param array $limt 分页要求
+     * @param array $limit 分页要求
      * @param array $where 检索条件
      * @param array $order 排序方式
      * @return array list数据列表 count结果条数 pageTotal总页数
@@ -146,7 +146,7 @@ class BaseModel extends Model
 
     /**
      * 按id查询记录详情
-     * @param $id 记录id
+     * @param int $id 记录id
      * @return array 数据记录详情
      * @throws ApiException
      */
@@ -169,9 +169,8 @@ class BaseModel extends Model
     public function returnSql($result){
 
         //开启调试模式，输出数据带SQL语句
-        if (config('app_debug')){
-            $result['sql'] = $this->getLastSql();
-        }
+        config('app_debug') && $result['sql'] = $this->getLastSql();
+
         return $result;
 
     }
