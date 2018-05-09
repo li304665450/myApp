@@ -27,8 +27,14 @@ class Index extends Base
      public function welcome()
      {
 
-         return model('News')->getAll();
+         $news = model('AdminDictionary');
+//         $news = new \app\common\model\News();
+//         var_dump($news->getAll());
+//         die;
+//         return $news->getAll();
+         return apiResult(1,'hao',$news->dictionary);
 
+//        return 111;
 
          //取栏目类型
 //         $where['type'] = ['lt', 2];
