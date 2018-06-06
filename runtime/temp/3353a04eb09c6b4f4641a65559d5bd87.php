@@ -1,3 +1,4 @@
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:67:"/Users/tuyou/mywork/myApp/public/../app/admin/view/login/login.html";i:1528272993;}*/ ?>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -7,15 +8,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
   <meta http-equiv="Cache-Control" content="no-siteapp" />
   <!--[if lt IE 9]>
-  <script type="text/javascript" src="____STATIC____/lib/html5shiv.js"></script>
-  <script type="text/javascript" src="____STATIC____/lib/respond.min.js"></script>
+  <script type="text/javascript" src="__/static__/lib/html5shiv.js"></script>
+  <script type="text/javascript" src="__/static__/lib/respond.min.js"></script>
   <![endif]-->
-  <link href="__STATIC__/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
-  <link href="__STATIC__/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
-  <link href="__STATIC__/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
-  <link href="__STATIC__/lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
+  <link href="/static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+  <link href="/static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
+  <link href="/static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
+  <link href="/static/lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
   <!--[if IE 6]>
-  <script type="text/javascript" src="____STATIC____/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+  <script type="text/javascript" src="__/static__/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
   <script>DD_belatedPNG.fix('*');</script>
   <![endif]-->
   <title>后台登录</title>
@@ -42,8 +43,8 @@
       </div>
       <div class="row cl">
         <div class="formControls col-xs-8 col-xs-offset-3">
-          <input class="input-text size-L" name="code" type="text" placeholder="__ROOT__验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;">
-          <img src="__ROOT__/captcha" alt="点击刷新验证码">
+          <input class="input-text size-L" name="code" type="text" placeholder="验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;">
+          <img src="/captcha" alt="点击刷新验证码">
       </div>
       <div class="row cl">
         <div class="formControls col-xs-8 col-xs-offset-3">
@@ -63,14 +64,14 @@
   </div>
 </div>
 <div class="footer">易玩畅游</div>
-<script type="text/javascript" src="__STATIC__/lib/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="__STATIC__/h-ui/js/H-ui.min.js"></script>
-<script type="text/javascript" src="__STATIC__/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/static/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
 <script type="text/javascript">
 
   //点击刷新验证码
   $('img').click(function () {
-      $(this).attr('src','__ROOT__/captcha?id='+Math.random());
+      $(this).attr('src','/captcha?id='+Math.random());
   })
 
   //提交登陆信息
@@ -78,7 +79,7 @@
 
       $.ajax({
           type : "POST",
-          url : "{:url('loginAjax')}",
+          url : "<?php echo url('loginAjax'); ?>",
           async : true,
           data : $("#form-login").serialize(),
           dataType : "json"
@@ -90,7 +91,7 @@
 
           //登陆成功跳转页面
           if(relult == "登陆成功"){
-              var wt = setTimeout('window.location.href="{:url(\'index/index\')}"',1000);
+              var wt = setTimeout('window.location.href="<?php echo url('index/index'); ?>"',1000);
           }
 
       });
